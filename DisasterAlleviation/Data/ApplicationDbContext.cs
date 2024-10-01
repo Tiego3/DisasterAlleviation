@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using DisasterAlleviation.Models;
 
 
 namespace DisasterAlleviation.Data
@@ -14,5 +15,8 @@ namespace DisasterAlleviation.Data
 
         // Add the IncidentReports DbSet
         public DbSet<IncidentReport> IncidentReports { get; set; }
+
+        public DbSet<Donation> Donations { get; set; }
+
     }
 }

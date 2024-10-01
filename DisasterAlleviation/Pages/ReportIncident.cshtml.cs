@@ -35,6 +35,7 @@ namespace DisasterAlleviation.Pages
             [Required(ErrorMessage = "Description is required")]
             [StringLength(500, ErrorMessage = "Description can't be longer than 500 characters")]
             public string Description { get; set; }
+            public DateTime ReportDate { get; set; }
         }
 
 
@@ -51,7 +52,7 @@ namespace DisasterAlleviation.Pages
                 Location = Input.Location,
                 Severity = Input.Severity,
                 Description = Input.Description,
-                ReportDate = DateTime.Now // Optional if you set a default in the model
+                ReportDate = Input.ReportDate
             };
 
             _context.IncidentReports.Add(report);

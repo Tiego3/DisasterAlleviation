@@ -1,0 +1,44 @@
+﻿@page
+@model DisasterAlleviation.Pages.VolunteerModel
+@{
+    ViewData["Title"] = "Volunteer Registration";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Input.Name"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.ContactInfo"></label>
+        <input asp-for="Input.ContactInfo" class="form-control" />
+        <span asp-validation-for="Input.ContactInfo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Skills"></label>
+        <input asp-for="Input.Skills" class="form-control" />
+        <span asp-validation-for="Input.Skills" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Availability"></label>
+        <input asp-for="Input.Availability" class="form-control" />
+        <span asp-validation-for="Input.Availability" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@if (!ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Form submission failed:</strong>
+        <ul>
+            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}

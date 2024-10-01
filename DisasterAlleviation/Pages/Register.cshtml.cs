@@ -29,12 +29,15 @@ namespace DisasterAlleviation.Pages
             [DataType(DataType.Password)]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
             public string Password { get; set; }
+
+            // Automatically generated user ID
+            public string UserId { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
-
+            var userId = Guid.NewGuid().ToString();
             var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
             var result = await _userManager.CreateAsync(user, Input.Password);
 

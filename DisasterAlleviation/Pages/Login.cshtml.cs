@@ -9,12 +9,10 @@ namespace DisasterAlleviation.Pages
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -22,9 +20,8 @@ namespace DisasterAlleviation.Pages
 
         public class InputModel
         {
-            [Required(ErrorMessage = "Email is required.")]
-            [EmailAddress(ErrorMessage = "Invalid email format.")]
-            public string Email { get; set; }
+            [Required(ErrorMessage = "Username is required.")]
+            public string UserName { get; set; }
 
             [Required(ErrorMessage = "Password is required.")]
             [DataType(DataType.Password)]
@@ -35,18 +32,11 @@ namespace DisasterAlleviation.Pages
         {
             if (!ModelState.IsValid) return Page();
 
-            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent: false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
             {
-                // Check if the user is an admin and redirect accordingly
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (await _userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    return RedirectToPage("/AdminDashboard");
-                }
-
-                return RedirectToPage("Index");
+                return RedirectToPage("Dashboard");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");

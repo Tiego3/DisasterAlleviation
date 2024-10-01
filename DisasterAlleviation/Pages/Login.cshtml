@@ -8,9 +8,9 @@
 
 <form method="post">
     <div class="form-group">
-        <label asp-for="Input.Email"></label>
-        <input asp-for="Input.Email" class="form-control" />
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
+        <label asp-for="Input.UserName"></label>
+        <input asp-for="Input.UserName" class="form-control" />
+        <span asp-validation-for="Input.UserName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Input.Password"></label>
@@ -23,6 +23,6 @@
 @if (!ModelState.IsValid)
 {
     <div class="alert alert-danger">
-        <strong>Login failed:</strong> Invalid login attempt. Please check your email and password.
+        <strong>Login failed:</strong> Invalid login attempt. Please check your username and password.
     </div>
 }

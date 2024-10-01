@@ -11,5 +11,8 @@ namespace DisasterAlleviation.Data
         : base(options)
         {
         }
+
+        // Add the IncidentReports DbSet
+        public DbSet<IncidentReport> IncidentReports { get; set; }
     }
 }

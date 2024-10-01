@@ -36,7 +36,7 @@ namespace DisasterAlleviation.Pages
 
             if (result.Succeeded)
             {
-                return RedirectToPage("Index");
+                return RedirectToPage("Dashboard");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your email and password.");

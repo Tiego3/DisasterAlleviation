@@ -1,0 +1,31 @@
+﻿@page
+@model DisasterAlleviation.Pages.IncidentManagementModel
+@{
+    ViewData["Title"] = "Incident Management";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Incident Type</th>
+            <th>Location</th>
+            <th>Severity</th>
+            <th>Description</th>
+            <th>Report Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var report in Model.IncidentReports)
+        {
+            <tr>
+                <td>@report.IncidentType</td>
+                <td>@report.Location</td>
+                <td>@report.Severity</td>
+                <td>@report.Description</td>
+                <td>@report.ReportDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
 {
@@ -22,9 +21,6 @@ namespace DisasterAlleviation.Pages
 
         public class InputModel
         {
-            [Required(ErrorMessage = "Username is required.")]
-            public string UserName { get; set; }
-
             [Required(ErrorMessage = "Email is required.")]
             [EmailAddress(ErrorMessage = "Invalid email format.")]
             public string Email { get; set; }
@@ -33,19 +29,21 @@ namespace DisasterAlleviation.Pages
             [DataType(DataType.Password)]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
             public string Password { get; set; }
+
+            
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
-
-            var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email };
+            var userId = Guid.NewGuid().ToString();
+            var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
             var result = await _userManager.CreateAsync(user, Input.Password);
 
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToPage("Login");
+                return RedirectToPage("Index");
             }
 
             foreach (var error in result.Errors)

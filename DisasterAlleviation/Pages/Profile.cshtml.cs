@@ -9,74 +9,84 @@ namespace DisasterAlleviation.Pages
     public class ProfileModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public ProfileModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ProfileModel(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public bool UpdateSuccess { get; set; }
+        public string SuccessMessage { get; set; }
+        public string ErrorMessage { get; set; }
 
         public class InputModel
         {
-            [Required(ErrorMessage = "Username is required.")]
-            public string UserName { get; set; }
-
             [Required(ErrorMessage = "Email is required.")]
             [EmailAddress(ErrorMessage = "Invalid email format.")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Password is required.")]
             [DataType(DataType.Password)]
-            [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
-            public string Password { get; set; }
+            [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 6)]
+            public string NewPassword { get; set; }
+
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm new password")]
+            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            public string ConfirmPassword { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound("User not found.");
-
-            Input = new InputModel
+            if (user != null)
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                Password = user.PasswordHash
-
-            };
-
-            return Page();
+                Input = new InputModel
+                {
+                    Email = user.Email
+                };
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
-
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound("User not found.");
-
-            user.UserName = Input.UserName;
-            user.Email = Input.Email;
-            user.PasswordHash = Input.Password;
-
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
+            if (user == null)
             {
-                UpdateSuccess = true;
-                return RedirectToPage("Dashboard");
+                return NotFound("User not found.");
             }
 
-            foreach (var error in result.Errors)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                return Page();
             }
 
-            return Page();
+            // Update email
+            if (user.Email != Input.Email)
+            {
+                user.Email = Input.Email;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    ErrorMessage = "Failed to update email.";
+                    return Page();
+                }
+            }
+
+            // Update password if provided
+            if (!string.IsNullOrEmpty(Input.NewPassword))
+            {
+                var passwordChangeResult = await _userManager.ChangePasswordAsync(user, Input.NewPassword, Input.NewPassword);
+                if (!passwordChangeResult.Succeeded)
+                {
+                    ErrorMessage = "Failed to change password.";
+                    return Page();
+                }
+            }
+
+            SuccessMessage = "Profile updated successfully.";
+            return RedirectToPage("Dashboard");
         }
     }
 }

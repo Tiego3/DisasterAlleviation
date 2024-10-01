@@ -24,6 +24,7 @@ namespace DisasterAlleviation.Pages
         {
             [Required(ErrorMessage = "Resource Type is required")]
             public string ResourceType { get; set; }
+                        
 
             [Required(ErrorMessage = "NameOfItem is required")]
             public string NameOfItem { get; set; }
@@ -60,8 +61,7 @@ namespace DisasterAlleviation.Pages
             // Add donation to the database
             _context.Donations.Add(donation);
             await _context.SaveChangesAsync();
-
-            // Redirect to a success page (e.g., 'Thank You' page)
+           
             return RedirectToPage("Dashboard");
         }
     }

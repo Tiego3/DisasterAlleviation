@@ -1,8 +1,15 @@
 ﻿@page
 @model DisasterAlleviation.Pages.AdminDashboard
+@{
     ViewData["Title"] = "Admin Dashboard";
 }
 
 <h2>Admin Dashboard</h2>
 
 <p>Welcome to the admin dashboard. Only users with the Admin role can access this page.</p>
+<div>
+    <a class="btn btn-primary" href="/IncidentManagement">Disaster Incident Reporting Management</a>
+    <a class="btn btn-primary" href="/DonationManagement">Donations Management</a>
+    <a class="btn btn-primary" href="/VolunteerManagement">Volunteer Management</a>
+    
+</div>

@@ -9,15 +9,17 @@
 <form method="post">
     <div class="form-group">
         <label asp-for="Input.ResourceType">Resource Type</label>
-        <select asp-for="Input.ResourceType" class="form-control">
+        <select asp-for="Input.ResourceType" class="form-control" id="resourceTypeDropdown" onchange="toggleOtherResourceInput()">
             <option value="">Select Resource Type</option>
             <option value="Food">Food</option>
             <option value="Clothing">Clothing</option>
             <option value="Medical Supplies">Medical Supplies</option>
+            <option value="Money">Money</option>
             <option value="Other">Other</option>
         </select>
         <span asp-validation-for="Input.ResourceType" class="text-danger"></span>
     </div>
+        
 
     <div class="form-group">
         <label asp-for="Input.NameOfItem">Name of Item</label>
@@ -37,8 +39,6 @@
         <span asp-validation-for="Input.NumberOfItems" class="text-danger"></span>
     </div>
 
-    
-
     <div class="form-group">
         <label asp-for="Input.Description"></label>
         <textarea asp-for="Input.Description" class="form-control"></textarea>
@@ -50,4 +50,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>        
+
+        function showConfirmation() {
+
+            alert("Donations has been submitted successfully.");
+            return true;
+        }
+
+    </script>
 }
+

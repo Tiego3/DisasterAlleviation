@@ -20,5 +20,7 @@ namespace DisasterAlleviation.Data
 
         public DbSet<Volunteer> Volunteers { get; set; }
 
+        public DbSet<TaskModel> Tasks { get; set; }
+
     }
 }

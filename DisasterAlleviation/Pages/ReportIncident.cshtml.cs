@@ -35,19 +35,19 @@ namespace DisasterAlleviation.Pages
             [Required(ErrorMessage = "Description is required")]
             [StringLength(500, ErrorMessage = "Description can't be longer than 500 characters")]
             public string Description { get; set; }
+
             public DateTime ReportDate { get; set; }
         }
 
 
+
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
-
-            
+            if (!ModelState.IsValid)
+                return Page();
 
             var report = new IncidentReport
             {
-               
                 IncidentType = Input.IncidentType,
                 Location = Input.Location,
                 Severity = Input.Severity,
@@ -58,7 +58,8 @@ namespace DisasterAlleviation.Pages
             _context.IncidentReports.Add(report);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("Dashboard"); // Redirect to the Dashboard after submission
+            return RedirectToPage("Dashboard"); 
         }
+
     }
 }

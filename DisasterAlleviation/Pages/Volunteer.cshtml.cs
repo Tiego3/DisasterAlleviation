@@ -40,12 +40,12 @@ namespace DisasterAlleviation.Pages
         {
             if (!ModelState.IsValid) return Page();
 
-            var user = await _userManager.GetUserAsync(User); // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User); 
 
             // Create a new Volunteer record
             var volunteer = new Volunteer
             {
-                UserId = user.Id, // Associate with the IdentityUser's ID
+                UserId = user.Id, 
                 Name = Input.Name,
                 ContactInfo = Input.ContactInfo,
                 Skills = Input.Skills,
@@ -55,7 +55,7 @@ namespace DisasterAlleviation.Pages
 
             // Save volunteer details to the database
             _context.Volunteers.Add(volunteer);
-            await _context.SaveChangesAsync(); // Save changes asynchronously
+            await _context.SaveChangesAsync(); 
 
             return RedirectToPage("VolunteerDashboard");
         }

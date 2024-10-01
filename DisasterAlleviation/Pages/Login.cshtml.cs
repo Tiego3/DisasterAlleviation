@@ -2,16 +2,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -36,10 +39,17 @@ namespace DisasterAlleviation.Pages
 
             if (result.Succeeded)
             {
-                return RedirectToPage("Dashboard");
+                // Check if the user is an admin and redirect accordingly
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    return RedirectToPage("/AdminDashboard");
+                }
+
+                return RedirectToPage("Index");
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your email and password.");
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return Page();
         }
     }

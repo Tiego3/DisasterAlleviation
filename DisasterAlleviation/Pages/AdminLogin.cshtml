@@ -1,10 +1,10 @@
 ﻿@page
-@model DisasterAlleviation.Pages.LoginModel
+@model DisasterAlleviation.Pages.AdminLoginModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Admin Login";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>Admin Login</h2>
 
 <form method="post">
     <div class="form-group">
@@ -17,13 +17,5 @@
         <input asp-for="Input.Password" type="password" class="form-control" />
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary" name="action" value="UserLogin">Login</button>
-    <button type="submit" class="btn btn-warning" name="action" value="AdminLogin">Admin Login</button>
+    <button type="submit" class="btn btn-warning">Login</button>
 </form>
-
-@if (!ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <strong>Login failed:</strong> Invalid login attempt. Please check your email and password.
-    </div>
-}

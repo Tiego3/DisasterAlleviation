@@ -1,16 +1,29 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome To Disaster Alleviation</h1>
-    
+    <h1 class="display-4">Welcome to Disaster Alleviation</h1>
 </div>
 
-<div>
-    <a class="btn btn-primary" href="/Login">Login</a>
-    <a class="btn btn-primary" href="/Register">Register</a>
-    
+<div class="login-form">
+    <form method="post" asp-page-handler="Login">
+        <h2>User Login</h2>
+        
+        <div class="form-group">
+            <label asp-for="Input.Email"></label>
+            <input asp-for="Input.Email" class="form-control" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" type="password" class="form-control" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" name="action" value="UserLogin">Login</button>
+        <a class="btn btn-link" href="/Register">Register</a>
+    </form>
 </div>

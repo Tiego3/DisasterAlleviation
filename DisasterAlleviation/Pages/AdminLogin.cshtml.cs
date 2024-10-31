@@ -20,6 +20,8 @@ namespace DisasterAlleviation.Pages
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public string ReturnUrl { get; set; }
+
         public class InputModel
         {
             [Required(ErrorMessage = "Email is required.")]
@@ -31,28 +33,36 @@ namespace DisasterAlleviation.Pages
             public string Password { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ReturnUrl = returnUrl ?? Url.Content("~/");
+
             if (!ModelState.IsValid) return Page();
 
-            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent: false, lockoutOnFailure: false);
+            var user = await _userManager.FindByEmailAsync(Input.Email);
+            if (user == null || !await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                ModelState.AddModelError(string.Empty, "Access denied: Only admins are allowed.");
+                return Page();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName, Input.Password, isPersistent: false, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-
-                if (await _userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    TempData["SuccessMessage"] = "Welcome Admin!";
-                    return RedirectToPage("AdminDashboard");
-                }
-
-                ModelState.AddModelError(string.Empty, "Access denied: You are not an admin.");
+                TempData["SuccessMessage"] = "Welcome Admin!";
+                return RedirectToPage("AdminDashboard");
+            }
+            else if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "This account has been locked due to multiple failed login attempts. Please try again later.");
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
+
             return Page();
         }
     }

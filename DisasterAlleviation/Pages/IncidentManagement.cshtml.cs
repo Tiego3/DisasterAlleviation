@@ -20,7 +20,9 @@ namespace DisasterAlleviation.Pages
 
         public async Task OnGetAsync()
         {
-            IncidentReports = await _context.IncidentReports.ToListAsync();
+            IncidentReports = await _context.IncidentReports
+            .OrderByDescending(report => report.ReportDate)
+            .ToListAsync();
         }
     }
 }

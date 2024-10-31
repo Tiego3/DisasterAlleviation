@@ -58,7 +58,7 @@ namespace DisasterAlleviation.Pages
             _context.IncidentReports.Add(report);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("Dashboard"); 
+            return RedirectToPage("IncidentManagement"); 
         }
 
     }

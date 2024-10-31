@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
 {
-    public class LoginModel : PageModel
+    public class AdminLoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public AdminLoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -31,7 +31,7 @@ namespace DisasterAlleviation.Pages
             public string Password { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync(string action)
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
 
@@ -39,18 +39,20 @@ namespace DisasterAlleviation.Pages
 
             if (result.Succeeded)
             {
-                // Check if the user is an admin and redirect accordingly
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (action == "AdminLogin" && await _userManager.IsInRoleAsync(user, "Admin"))
+
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
                 {
+                    TempData["SuccessMessage"] = "Welcome Admin!";
                     return RedirectToPage("AdminDashboard");
                 }
 
-                // For regular user login
-                return RedirectToPage("Dashboard");
+                ModelState.AddModelError(string.Empty, "Access denied: You are not an admin.");
             }
-
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
             return Page();
         }
     }

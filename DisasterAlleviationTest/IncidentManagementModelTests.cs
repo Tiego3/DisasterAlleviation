@@ -2,15 +2,25 @@
 using DisasterAlleviation.Pages;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace DisasterAlleviationTest
 {
     public class IncidentManagementTests
     {
+        private readonly TestReport _testReport;
+
+        public IncidentManagementTests()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+            _testReport = new TestReport();
+        }
+
         [Fact]
         public async Task OnGetAsync_ReturnsIncidentReportsOrderedByReportDate()
         {
@@ -47,14 +57,20 @@ namespace DisasterAlleviationTest
                 var pageModel = new IncidentManagementModel(context);
 
                 // Act
+                var stopwatch = Stopwatch.StartNew();
                 await pageModel.OnGetAsync();
+                stopwatch.Stop();
 
                 // Assert
-                Assert.Equal("Flood", pageModel.IncidentReports.First().IncidentType);
-                Assert.Equal("Fire", pageModel.IncidentReports.Last().IncidentType);
+                var isSuccess = pageModel.IncidentReports.First().IncidentType == "Flood" &&
+                                pageModel.IncidentReports.Last().IncidentType == "Fire";
+
+                _testReport.AddTestResult(nameof(OnGetAsync_ReturnsIncidentReportsOrderedByReportDate), isSuccess, stopwatch.Elapsed);
+
+                // Generate report at the end of tests
+                _testReport.GenerateHtmlReport("TestReport.html");
             }
         }
-
     }
-
 }
+

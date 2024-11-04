@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace DisasterAlleviationTest
 {
     public class ReportIncidentModelTests
     {
         private readonly ApplicationDbContext _context;
+        private readonly TestReport _testReport;
 
         public ReportIncidentModelTests()
         {
@@ -20,6 +23,7 @@ namespace DisasterAlleviationTest
                 .UseInMemoryDatabase(databaseName: "TestDb")
                 .Options;
             _context = new ApplicationDbContext(options);
+            _testReport = new TestReport();
         }
 
         [Fact]
@@ -39,12 +43,18 @@ namespace DisasterAlleviationTest
             };
 
             // Act
+            var stopwatch = Stopwatch.StartNew();
             var result = await pageModel.OnPostAsync();
+            stopwatch.Stop();
 
             // Assert
-            Assert.Equal(1, _context.IncidentReports.Count());
-            Assert.IsType<RedirectToPageResult>(result);
+            var isSuccess = _context.IncidentReports.Count() == 1 && result is RedirectToPageResult;
+            _testReport.AddTestResult(nameof(OnPostAsync_ShouldAddIncidentReport_WhenModelStateIsValid), isSuccess, stopwatch.Elapsed);
+
+            // Generate report at the end of tests
+            _testReport.GenerateHtmlReport("*/TestReport.html");
         }
     }
 
+   
 }

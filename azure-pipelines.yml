@@ -9,7 +9,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'windows-latest'
+ name: Self-Hosted
 
 steps:
 - task: UseDotNet@2

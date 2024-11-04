@@ -9,13 +9,13 @@ trigger:
       - main
 
 pool:
-  vmImage: 'Default'
+ name: Self-Hosted
 
 steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '6.x.x'  # Use the appropriate .NET version
+    version: '8.0'  # Use the appropriate .NET version
 
 - task: DotNetCoreCLI@2
   inputs:

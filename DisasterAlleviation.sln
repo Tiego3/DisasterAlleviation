@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisasterAlleviation", "DisasterAlleviation\DisasterAlleviation.csproj", "{89283459-3B0B-4A74-BA8A-CD93C716F5E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisasterAlleviationTest", "DisasterAlleviationTest\DisasterAlleviationTest.csproj", "{37675ED6-FD19-4DC9-9173-739DFC0E9F97}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{89283459-3B0B-4A74-BA8A-CD93C716F5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89283459-3B0B-4A74-BA8A-CD93C716F5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89283459-3B0B-4A74-BA8A-CD93C716F5E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37675ED6-FD19-4DC9-9173-739DFC0E9F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37675ED6-FD19-4DC9-9173-739DFC0E9F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37675ED6-FD19-4DC9-9173-739DFC0E9F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37675ED6-FD19-4DC9-9173-739DFC0E9F97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

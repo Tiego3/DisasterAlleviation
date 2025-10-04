@@ -1,29 +1,72 @@
 ﻿@page
-@model IndexModel
+@model DisasterAlleviation.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Disaster Alleviation</h1>
-</div>
+<section class="hero">
+    <div class="hero-overlay">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Bringing Hope in <span class="accent">Times of Crisis</span></h1>
+                <p class="hero-sub">The Disaster Alleviation Foundation provides practical aid during disasters, ensuring transparency and swift action when communities need it most.</p>
+                <div class="hero-ctas">
+                    <a class="btn btn-primary" href="/Donate">Donate Now</a>
+                    <a class="btn btn-secondary" href="/About">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-stats" aria-hidden="true">
+                <div class="stat-mini">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">Total Money Donations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<div class="login-form">
-    <form method="post" asp-page-handler="Login">
-        <h2>Login</h2>
-        
-        <div class="form-group">
-            <label asp-for="Input.Email"></label>
-            <input asp-for="Input.Email" class="form-control" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
+<main class="container page-content">
+    <section class="impact-section">
+        <h2 class="section-title">Our Impact by the Numbers</h2>
+        <p class="section-sub">Transparency is at the core of our mission. Here's how your donations are making a real difference.</p>
+
+        <div class="dashboard-grid">
+            <div class="dash-card">
+                <div class="dash-title">Total Money Donations</div>
+                <div class="dash-value">$0</div>
+                <div class="dash-foot">Received from generous donors</div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-title">Goods Received</div>
+                <div class="dash-value">0</div>
+                <div class="dash-foot">Items donated for distribution</div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-title">Active Disasters</div>
+                <div class="dash-value">0</div>
+                <div class="dash-foot">Currently receiving aid</div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-title">Total Donors</div>
+                <div class="dash-value">0</div>
+                <div class="dash-foot">Supporting our mission</div>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Input.Password"></label>
-            <input asp-for="Input.Password" type="password" class="form-control" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </section>
+
+    <section class="disasters-section">
+        <h2 class="section-title">Current Disaster Response</h2>
+        <p class="section-sub">See how resources are being allocated to help communities in crisis right now.</p>
+
+        <div class="disasters-grid">
+            <div class="no-disasters">
+                <div class="no-icon">⚠️</div>
+                <div class="no-text">No active disasters at this time.</div>
+                <a class="btn btn-primary-outline" href="/Disasters">View All Disasters</a>
+            </div>
         </div>
-        
-        <button type="submit" class="btn btn-primary" name="action" value="UserLogin">Login</button>
-        <a class="btn btn-link" href="/Register">Register</a>
-    </form>
-</div>
+    </section>
+</main>

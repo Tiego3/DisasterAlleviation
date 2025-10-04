@@ -10,55 +10,75 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">DisasterAlleviation</a>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container header-inner">
+                <!-- ✅ Logo -->
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-page="/Index">
+                    <img src="~/images/logo.png" alt="Disaster Alleviation Foundation" style="height:40px; margin-right:10px;" />
+                    <span>Disaster Alleviation Foundation</span>
+                </a>
+
+                <!-- Mobile menu toggle -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <!-- Nav links -->
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Donate">Donate</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Volunteer">Volunteer</a></li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form method="post" asp-page="/Logout" class="form-inline">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary" href="/Account/Login">Login</a>
+                            }
                         </li>
                     </ul>
-                    <div class="navbar-nav">
-                      
-                        @if (User.Identity.IsAuthenticated)
-                        {                           
-                            <form method="post" asp-page="/Logout" class="form-inline">
-                                <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
-                            </form>
-                        }
-                        else
-                        {
-                           
-                            <a class="btn btn-primary" href="/AdminLogin">Admin Login</a>
-                        }
-                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - DisasterAlleviation - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <!-- ✅ Unified Footer -->
+    <footer class="site-footer bg-dark text-light pt-4">
+        <div class="container footer-inner d-flex justify-content-between">
+            <div class="footer-brand">
+                <img src="~/images/logo-white.png" alt="Disaster Alleviation Foundation" style="height:40px;" />
+                <p>Committed to transparency, swift action, and bringing hope to communities in crisis.</p>
+            </div>
+            <div class="footer-links d-flex">
+                <div class="me-4">
+                    <h4>Contact</h4>
+                    <p>info@disasteralleviation.org</p>
+                </div>
+                <div>
+                    <h4>Follow</h4>
+                    <p class="socials">Twitter · Facebook · Instagram</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom bg-secondary text-center py-2 mt-3">
+            <div class="container">© @DateTime.Now.Year Disaster Alleviation Foundation. All rights reserved.</div>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

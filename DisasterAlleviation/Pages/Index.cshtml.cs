@@ -1,58 +1,43 @@
-using Microsoft.AspNetCore.Identity;
+using DisasterAlleviation.Data;
+using Microsoft.AspNetCore.Identity; // This 'using' isn't needed for the code provided, but kept it as it was in the original
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System; // This 'using' isn't needed for the code provided, but kept it as it was in the original
+using System.ComponentModel.DataAnnotations; // This 'using' isn't needed for the code provided, but kept it as it was in the original
 using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public IndexModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public IndexModel(ApplicationDbContext context)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
+            _context = context;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        // Properties to hold the aggregated data for the dashboard
+        public decimal TotalMoneyDonations { get; set; }
+        public int TotalGoodsReceived { get; set; }
+        public int TotalDonors { get; set; }
 
-        public class InputModel
+        public async Task OnGetAsync()
         {
-            [Required(ErrorMessage = "Email is required.")]
-            [EmailAddress(ErrorMessage = "Invalid email format.")]
-            public string Email { get; set; }
+            TotalMoneyDonations = await _context.MonetaryDonations
+                .Select(d => (decimal?)d.Amount)
+                .SumAsync() ?? 0m;
 
-            [Required(ErrorMessage = "Password is required.")]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-        }
+            TotalGoodsReceived = await _context.GoodsDonations
+                .Select(d => (int?)d.ItemsCount)
+                .SumAsync() ?? 0;
 
-        public async Task<IActionResult> OnPostAsync(string action)
-        {
-            if (!ModelState.IsValid) return Page();
-
-            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent: false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-
-                if (action == "AdminLogin" && await _userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    TempData["SuccessMessage"] = "Welcome Admin!";
-                    return RedirectToPage("AdminDashboard");
-                }
-
-                TempData["SuccessMessage"] = "Login successful!";
-                return RedirectToPage("Dashboard");
-            }
-
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            return Page();
+            TotalDonors = await _context.MonetaryDonations
+                .Where(d => !string.IsNullOrEmpty(d.DonorName))
+                .Select(d => d.DonorName!)
+                .Distinct()
+                .CountAsync();
         }
     }
 }

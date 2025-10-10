@@ -1,0 +1,128 @@
+﻿@page
+@model DisasterAlleviation.Pages.DonateModel
+@{
+    ViewData["Title"] = "Donate";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Make a Donation</h1>
+        <p class="text-muted">Your generosity helps provide immediate relief to communities in need.</p>
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="donationTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="money-tab" data-bs-toggle="tab" href="#money" role="tab">Monetary Donation</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="goods-tab" data-bs-toggle="tab" href="#goods" role="tab">Goods Donation</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Monetary Donation -->
+        <div class="tab-pane fade show active" id="money" role="tabpanel">
+            <form method="post" asp-page-handler="MonetaryDonation" id="monetaryForm">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="moneyAnonymous" asp-for="MonetaryForm.IsAnonymous" />
+                    <label class="form-check-label" for="moneyAnonymous">Donate anonymously</label>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MonetaryForm.DonorName" class="form-label">Your Name</label>
+                    <input asp-for="MonetaryForm.DonorName" class="form-control" id="monetaryDonorName" />
+                    <span asp-validation-for="MonetaryForm.DonorName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MonetaryForm.Amount" class="form-label">Donation Amount (USD)</label>
+                    <input asp-for="MonetaryForm.Amount" class="form-control" type="number" step="0.01" min="1" required />
+                    <span asp-validation-for="MonetaryForm.Amount" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Donate Now</button>
+            </form>
+        </div>
+
+        <!-- Goods Donation -->
+        <div class="tab-pane fade" id="goods" role="tabpanel">
+            <form method="post" asp-page-handler="GoodsDonation" id="goodsForm">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="goodsAnonymous" asp-for="GoodsForm.IsAnonymous" />
+                    <label class="form-check-label" for="goodsAnonymous">Donate anonymously</label>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GoodsForm.DonorName" class="form-label">Your Name</label>
+                    <input asp-for="GoodsForm.DonorName" class="form-control" id="goodsDonorName" />
+                    <span asp-validation-for="GoodsForm.DonorName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GoodsForm.CategoryId" class="form-label">Category</label>
+                    <select asp-for="GoodsForm.CategoryId" class="form-select" required>
+                        <option value="">Select category</option>
+                        @if (Model.Categories != null)
+                        {
+                            foreach (var cat in Model.Categories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="GoodsForm.CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GoodsForm.ItemsCount" class="form-label">Number of Items</label>
+                    <input asp-for="GoodsForm.ItemsCount" class="form-control" type="number" min="1" required />
+                    <span asp-validation-for="GoodsForm.ItemsCount" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GoodsForm.Description" class="form-label">Description</label>
+                    <textarea asp-for="GoodsForm.Description" class="form-control" required></textarea>
+                    <span asp-validation-for="GoodsForm.Description" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Donation</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        (function () {
+            // Monetary
+            const moneyAnon = document.getElementById('moneyAnonymous');
+            const monetaryName = document.getElementById('monetaryDonorName');
+
+            // Goods
+            const goodsAnon = document.getElementById('goodsAnonymous');
+            const goodsName = document.getElementById('goodsDonorName');
+
+            function toggleField(checkbox, field) {
+                if (!checkbox || !field) return;
+                if (checkbox.checked) {
+                    field.value = '';
+                    field.setAttribute('disabled', 'disabled');
+                    field.classList.add('disabled');
+                } else {
+                    field.removeAttribute('disabled');
+                    field.classList.remove('disabled');
+                }
+            }
+
+            // init states on page load (supports form reload with validation errors)
+            if (moneyAnon && monetaryName) toggleField(moneyAnon, monetaryName);
+            if (goodsAnon && goodsName) toggleField(goodsAnon, goodsName);
+
+            // add listeners
+            if (moneyAnon && monetaryName) moneyAnon.addEventListener('change', () => toggleField(moneyAnon, monetaryName));
+            if (goodsAnon && goodsName) goodsAnon.addEventListener('change', () => toggleField(goodsAnon, goodsName));
+        })();
+    </script>
+}

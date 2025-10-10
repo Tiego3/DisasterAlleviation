@@ -4,69 +4,42 @@
     ViewData["Title"] = "Home";
 }
 
-<section class="hero">
-    <div class="hero-overlay">
-        <div class="container hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">Bringing Hope in <span class="accent">Times of Crisis</span></h1>
-                <p class="hero-sub">The Disaster Alleviation Foundation provides practical aid during disasters, ensuring transparency and swift action when communities need it most.</p>
-                <div class="hero-ctas">
-                    <a class="btn btn-primary" href="/Donate">Donate Now</a>
-                    <a class="btn btn-secondary" href="/About">Learn More</a>
+<section class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Bringing Hope in <span class="text-warning">Times of Crisis</span></h1>
+        <p class="lead mb-4">Your donations bring real impact when communities need it most.</p>
+        <a href="/Donate" class="btn btn-light btn-lg">Donate Now</a>
+    </div>
+</section>
+
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="mb-5 fw-bold">Our Impact by the Numbers</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5">Total Money Donations</h3>
+                        <p class="display-6 text-primary fw-bold">R @Model.TotalMoneyDonations</p>
+                    </div>
                 </div>
             </div>
-            <div class="hero-stats" aria-hidden="true">
-                <div class="stat-mini">
-                    <div class="stat-value">$0</div>
-                    <div class="stat-label">Total Money Donations</div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5">Goods Received</h3>
+                        <p class="display-6 text-primary fw-bold">@Model.TotalGoodsReceived items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5">Total Donors</h3>
+                        <p class="display-6 text-primary fw-bold">@Model.TotalDonors</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<main class="container page-content">
-    <section class="impact-section">
-        <h2 class="section-title">Our Impact by the Numbers</h2>
-        <p class="section-sub">Transparency is at the core of our mission. Here's how your donations are making a real difference.</p>
-
-        <div class="dashboard-grid">
-            <div class="dash-card">
-                <div class="dash-title">Total Money Donations</div>
-                <div class="dash-value">$0</div>
-                <div class="dash-foot">Received from generous donors</div>
-            </div>
-
-            <div class="dash-card">
-                <div class="dash-title">Goods Received</div>
-                <div class="dash-value">0</div>
-                <div class="dash-foot">Items donated for distribution</div>
-            </div>
-
-            <div class="dash-card">
-                <div class="dash-title">Active Disasters</div>
-                <div class="dash-value">0</div>
-                <div class="dash-foot">Currently receiving aid</div>
-            </div>
-
-            <div class="dash-card">
-                <div class="dash-title">Total Donors</div>
-                <div class="dash-value">0</div>
-                <div class="dash-foot">Supporting our mission</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="disasters-section">
-        <h2 class="section-title">Current Disaster Response</h2>
-        <p class="section-sub">See how resources are being allocated to help communities in crisis right now.</p>
-
-        <div class="disasters-grid">
-            <div class="no-disasters">
-                <div class="no-icon">⚠️</div>
-                <div class="no-text">No active disasters at this time.</div>
-                <a class="btn btn-primary-outline" href="/Disasters">View All Disasters</a>
-            </div>
-        </div>
-    </section>
-</main>

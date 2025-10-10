@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using DisasterAlleviation.Models;
+using DisasterAlleviation.Pages;
 
 
 namespace DisasterAlleviation.Data
@@ -21,6 +22,11 @@ namespace DisasterAlleviation.Data
         public DbSet<Volunteer> Volunteers { get; set; }
 
         public DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<MonetaryDonation> MonetaryDonations { get; set; }
+        public DbSet<GoodsDonation> GoodsDonations { get; set; }
+
+        // ✅ Add this line:
+        public DbSet<Category> Categories { get; set; }
 
     }
 }

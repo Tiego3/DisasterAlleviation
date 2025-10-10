@@ -1,84 +1,74 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DisasterAlleviation</title>
+    <title>@ViewData["Title"] - Disaster Alleviation Foundation</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DisasterAlleviation.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container header-inner">
-                <!-- ✅ Logo -->
-                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-page="/Index">
-                    <img src="~/images/logo.png" alt="Disaster Alleviation Foundation" style="height:40px; margin-right:10px;" />
-                    <span>Disaster Alleviation Foundation</span>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-primary" asp-page="/Index">
+                    Disaster Alleviation Foundation
                 </a>
-
-                <!-- Mobile menu toggle -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <!-- Nav links -->
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Donate">Donate</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Volunteer">Volunteer</a></li>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <form method="post" asp-page="/Logout" class="form-inline">
-                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" href="/Account/Login">Login</a>
-                            }
+                            <a class="nav-link" asp-page="/Index">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Donate">Donate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Volunteer">Volunteer</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-page="/Account/Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link">Sign out</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Login">Sign in</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
-    <!-- ✅ Unified Footer -->
-    <footer class="site-footer bg-dark text-light pt-4">
-        <div class="container footer-inner d-flex justify-content-between">
-            <div class="footer-brand">
-                <img src="~/images/logo-white.png" alt="Disaster Alleviation Foundation" style="height:40px;" />
-                <p>Committed to transparency, swift action, and bringing hope to communities in crisis.</p>
-            </div>
-            <div class="footer-links d-flex">
-                <div class="me-4">
-                    <h4>Contact</h4>
-                    <p>info@disasteralleviation.org</p>
-                </div>
-                <div>
-                    <h4>Follow</h4>
-                    <p class="socials">Twitter · Facebook · Instagram</p>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom bg-secondary text-center py-2 mt-3">
-            <div class="container">© @DateTime.Now.Year Disaster Alleviation Foundation. All rights reserved.</div>
+    <footer class="footer bg-primary text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-1 fw-bold">Disaster Alleviation Foundation</p>
+            <small>Committed to transparency, swift action, and bringing hope to communities in crisis.</small>
+            <br />
+            <small>&copy; 2024 Disaster Alleviation Foundation. All rights reserved.</small>
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

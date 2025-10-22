@@ -4,45 +4,69 @@
     ViewData["Title"] = "Home";
 }
 
-<section class="bg-primary text-white text-center py-5">
-    <div class="container">
-        <h1 class="display-4 fw-bold mb-3">Bringing Hope in <span class="text-warning">Times of Crisis</span></h1>
-        <p class="lead mb-4">Your donations bring real impact when communities need it most.</p>
-        <a href="/Donate" class="btn btn-light btn-lg">Donate Now</a>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay">
+        <div class="container text-center">
+            <h1 class="hero-title">
+                Bringing Hope in <span class="highlight">Times of Crisis</span>
+            </h1>
+            <p class="hero-sub">
+                The Disaster Alleviation Foundation provides practical aid during disasters, ensuring
+                transparency and swift action when communities need it most.
+            </p>
+            <a href="/Donate" class="btn btn-primary btn-lg">Donate Now</a>
+        </div>
     </div>
 </section>
 
-<section class="py-5 bg-light text-center">
-    <div class="container">
-        <h2 class="mb-5 fw-bold">Our Impact by the Numbers</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5">Total Money Donations</h3>
-                        <p class="display-6 text-primary fw-bold">R @Model.TotalMoneyDonations</p>
-                    </div>
-                </div>
+<!-- Impact Section -->
+<section class="impact-section">
+    <div class="container text-center">
+        <h2 class="section-title">Our Impact by the Numbers</h2>
+        <p class="section-sub">
+            Transparency is at the core of our mission. Here’s how your donations are making a real difference.
+        </p>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <h3 class="impact-title">Total Money Donations</h3>
+                <p class="impact-value">R @Model.TotalMoneyDonations</p>
+                <p class="impact-foot">Received from generous donors</p>
             </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5">Goods Received</h3>
-                        <p class="display-6 text-primary fw-bold">@Model.TotalGoodsReceived items</p>
-                    </div>
-                </div>
+
+            <div class="impact-card">
+                <h3 class="impact-title">Goods Received</h3>
+                <p class="impact-value">@Model.TotalGoodsReceived</p>
+                <p class="impact-foot">Items donated for distribution</p>
             </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5">Total Donors</h3>
-                        <p class="display-6 text-primary fw-bold">@Model.TotalDonors</p>
-                    </div>
-                </div>
+
+            <div class="impact-card">
+                <h3 class="impact-title">Total Donors</h3>
+                <p class="impact-value">@Model.TotalDonors</p>
+                <p class="impact-foot">Supporting our mission</p>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Current Disasters -->
+<section class="current-disasters">
+    <div class="container text-center">
+        <h2 class="section-title">Current Disaster Response</h2>
+        <p class="section-sub">
+            See how resources are being allocated to help communities in crisis right now.
+        </p>
+
+        <div class="no-disasters">
+            <div class="no-icon">⚠️</div>
+            <p class="no-text">No active disasters at this time.</p>
+        </div>
+
+        <a href="/Disasters" class="btn btn-primary mt-4">View All Disasters</a>
+    </div>
+</section>
+
 @if (TempData["AnonId"] != null)
 {
     <div class="alert alert-info mt-4 text-center">

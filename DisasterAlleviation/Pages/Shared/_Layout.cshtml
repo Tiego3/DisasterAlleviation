@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,65 +11,60 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand fw-bold text-primary" asp-page="/Index">
-                    Disaster Alleviation Foundation
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Donate">Donate</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Volunteer">Volunteer</a>
-                        </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Dashboard">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-area="" asp-page="/Account/Logout" method="post" class="d-inline">
-                                    <button type="submit" class="nav-link btn btn-link">Sign out</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Account/Login">Sign in</a>
-                            </li>
-                        }
-                    </ul>
+    <!-- ======================= -->
+    <!-- NAVIGATION BAR -->
+    <!-- ======================= -->
+    <header class="main-header border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white container">
+            <a class="navbar-brand d-flex align-items-center" asp-page="/Index">
+                <img src="~/images/logo.png" alt="Logo" class="brand-logo me-2" />
+                <div>
+                    <div class="brand-name fw-bold text-primary">Disaster Alleviation Foundation</div>
+                    <div class="brand-tag text-muted small">Providing hope in times of crisis</div>
                 </div>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                <ul class="navbar-nav align-items-lg-center mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewData["Title"]?.ToString() == "Home" ? "active" : "")" asp-page="/Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewData["Title"]?.ToString() == "Donate" ? "active" : "")" asp-page="/Donate">Donate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewData["Title"]?.ToString() == "Volunteer" ? "active" : "")" asp-page="/Volunteer">Volunteer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary rounded-pill ms-lg-3" asp-page="/Account/Register">Sign Up</a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
 
-    <main role="main" class="pb-3">
+    <!-- ======================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ======================= -->
+    <main class="flex-shrink-0">
         @RenderBody()
     </main>
 
-    <footer class="footer bg-primary text-white text-center py-3 mt-5">
-        <div class="container">
-            <p class="mb-1 fw-bold">Disaster Alleviation Foundation</p>
-            <small>Committed to transparency, swift action, and bringing hope to communities in crisis.</small>
-            <br />
-            <small>&copy; 2024 Disaster Alleviation Foundation. All rights reserved.</small>
-        </div>
+    <!-- ======================= -->
+    <!-- FOOTER -->
+    <!-- ======================= -->
+    <footer class="main-footer text-center mt-auto py-4">
+        <p class="mb-1 fw-semibold">© @DateTime.Now.Year Disaster Alleviation Foundation</p>
+        <p class="text-muted small mb-0">Together we bring hope, relief, and transparency.</p>
     </footer>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

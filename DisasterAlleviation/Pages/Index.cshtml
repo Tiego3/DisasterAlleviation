@@ -43,3 +43,10 @@
         </div>
     </div>
 </section>
+@if (TempData["AnonId"] != null)
+{
+    <div class="alert alert-info mt-4 text-center">
+        <strong>Your Anonymous Donor ID:</strong> @TempData["AnonId"] <br />
+        Please save this ID to use for future donations.
+    </div>
+}

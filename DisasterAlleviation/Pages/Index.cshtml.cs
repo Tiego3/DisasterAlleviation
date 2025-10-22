@@ -1,10 +1,10 @@
 using DisasterAlleviation.Data;
-using Microsoft.AspNetCore.Identity; // This 'using' isn't needed for the code provided, but kept it as it was in the original
+using Microsoft.AspNetCore.Identity; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System; // This 'using' isn't needed for the code provided, but kept it as it was in the original
-using System.ComponentModel.DataAnnotations; // This 'using' isn't needed for the code provided, but kept it as it was in the original
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
@@ -22,6 +22,7 @@ namespace DisasterAlleviation.Pages
         public decimal TotalMoneyDonations { get; set; }
         public int TotalGoodsReceived { get; set; }
         public int TotalDonors { get; set; }
+        
 
         public async Task OnGetAsync()
         {
@@ -38,6 +39,8 @@ namespace DisasterAlleviation.Pages
                 .Select(d => d.DonorName!)
                 .Distinct()
                 .CountAsync();
+
+            TotalDonors = await _context.Donors.CountAsync();
         }
     }
 }

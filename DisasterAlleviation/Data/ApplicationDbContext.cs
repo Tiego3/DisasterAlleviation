@@ -24,9 +24,9 @@ namespace DisasterAlleviation.Data
         public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<MonetaryDonation> MonetaryDonations { get; set; }
         public DbSet<GoodsDonation> GoodsDonations { get; set; }
-
-        // ✅ Add this line:
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Donor> Donors { get; set; }
+
 
     }
 }

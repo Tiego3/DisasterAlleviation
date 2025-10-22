@@ -23,5 +23,7 @@ namespace DisasterAlleviation.Models
 
         [Required]
         public string Description { get; set; } = string.Empty;
+        public int DonorId { get; set; } // NEW
+        public Donor Donor { get; set; }
     }
 }

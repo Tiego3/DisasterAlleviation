@@ -12,5 +12,7 @@ namespace DisasterAlleviation.Models
         [Required]
         [Range(1, double.MaxValue)]
         public decimal Amount { get; set; }
+        public int DonorId { get; set; } // NEW
+        public Donor Donor { get; set; }
     }
 }

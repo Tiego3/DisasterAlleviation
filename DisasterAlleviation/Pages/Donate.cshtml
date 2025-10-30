@@ -1,0 +1,232 @@
+﻿@page
+@model DisasterAlleviation.Pages.DonateModel
+@{
+    ViewData["Title"] = "Donate";
+}
+
+<section class="donate-section container py-5">
+    <h2 class="text-center mb-4">Make a Difference Today</h2>
+    <p class="text-center text-muted mb-5">Your generosity helps provide immediate relief to communities in need.</p>
+
+    @if (!string.IsNullOrEmpty(TempData["AnonId"] as string))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Thank you for your donation!</strong> Your Anonymous ID is: <strong>@TempData["AnonId"]</strong>
+            <br />Please save this ID if you wish to donate anonymously again in the future.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs justify-content-center mb-4" id="donationTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="monetary-tab" data-bs-toggle="tab" data-bs-target="#monetary" type="button" role="tab" aria-controls="monetary" aria-selected="true">
+                Monetary Donation
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="goods-tab" data-bs-toggle="tab" data-bs-target="#goods" type="button" role="tab" aria-controls="goods" aria-selected="false">
+                Goods Donation
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Monetary Donation Tab -->
+        <div class="tab-pane fade show active" id="monetary" role="tabpanel" aria-labelledby="monetary-tab">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card p-4 shadow-sm">
+                        <h4 class="mb-3 text-primary">Monetary Donation</h4>
+                        <form method="post" asp-page-handler="MonetaryDonation" id="monetaryForm">
+                            <div class="form-check mb-3">
+                                <input asp-for="MonetaryForm.IsAnonymous" class="form-check-input" type="checkbox" id="monetaryAnonymous" />
+                                <label asp-for="MonetaryForm.IsAnonymous" class="form-check-label" for="monetaryAnonymous">
+                                    Donate Anonymously
+                                </label>
+                            </div>
+
+                            <div class="mb-3" id="monetaryNameGroup">
+                                <label asp-for="MonetaryForm.DonorName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input asp-for="MonetaryForm.DonorName" class="form-control" id="monetaryName" placeholder="Enter your name" />
+                                <span asp-validation-for="MonetaryForm.DonorName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3" id="monetaryEmailGroup">
+                                <label asp-for="MonetaryForm.Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input asp-for="MonetaryForm.Email" class="form-control" id="monetaryEmail" placeholder="name@example.com" />
+                                <span asp-validation-for="MonetaryForm.Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3" id="monetaryAnonIdGroup" style="display:none;">
+                                <label asp-for="MonetaryForm.AnonymousId" class="form-label">Anonymous ID (if returning)</label>
+                                <input asp-for="MonetaryForm.AnonymousId" class="form-control" placeholder="Optional" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="MonetaryForm.Amount" class="form-label">Donation Amount (R) <span class="text-danger">*</span></label>
+                                <input asp-for="MonetaryForm.Amount" class="form-control" type="number" step="0.01" min="1" required />
+                                <span asp-validation-for="MonetaryForm.Amount" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Donate Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goods Donation Tab -->
+        <div class="tab-pane fade" id="goods" role="tabpanel" aria-labelledby="goods-tab">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card p-4 shadow-sm">
+                        <h4 class="mb-3 text-primary">Goods Donation</h4>
+                        <form method="post" asp-page-handler="GoodsDonation" id="goodsForm">
+                            <div class="form-check mb-3">
+                                <input asp-for="GoodsForm.IsAnonymous" class="form-check-input" type="checkbox" id="goodsAnonymous" />
+                                <label asp-for="GoodsForm.IsAnonymous" class="form-check-label" for="goodsAnonymous">
+                                    Donate Anonymously
+                                </label>
+                            </div>
+
+                            <div class="mb-3" id="goodsNameGroup">
+                                <label asp-for="GoodsForm.DonorName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input asp-for="GoodsForm.DonorName" class="form-control" id="goodsName" placeholder="Enter your name" />
+                                <span asp-validation-for="GoodsForm.DonorName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3" id="goodsEmailGroup">
+                                <label asp-for="GoodsForm.Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input asp-for="GoodsForm.Email" class="form-control" id="goodsEmail" placeholder="name@example.com" />
+                                <span asp-validation-for="GoodsForm.Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3" id="goodsAnonIdGroup" style="display:none;">
+                                <label asp-for="GoodsForm.AnonymousId" class="form-label">Anonymous ID (if returning)</label>
+                                <input asp-for="GoodsForm.AnonymousId" class="form-control" placeholder="Optional" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="GoodsForm.CategoryId" class="form-label">Select Category <span class="text-danger">*</span></label>
+                                <select asp-for="GoodsForm.CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" class="form-select" required>
+                                    <option value="">-- Select a category --</option>
+                                </select>
+                                <span asp-validation-for="GoodsForm.CategoryId" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="GoodsForm.ItemsCount" class="form-label">Number of Items <span class="text-danger">*</span></label>
+                                <input asp-for="GoodsForm.ItemsCount" class="form-control" type="number" min="1" required />
+                                <span asp-validation-for="GoodsForm.ItemsCount" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="GoodsForm.Description" class="form-label">Description <span class="text-danger">*</span></label>
+                                <textarea asp-for="GoodsForm.Description" class="form-control" rows="3" placeholder="Describe your goods" required></textarea>
+                                <span asp-validation-for="GoodsForm.Description" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Submit Goods Donation</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function() {
+            // Email validation regex
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+            // Monetary form handling
+            var monetaryAnonymous = document.getElementById('monetaryAnonymous');
+            var monetaryNameGroup = document.getElementById('monetaryNameGroup');
+            var monetaryEmailGroup = document.getElementById('monetaryEmailGroup');
+            var monetaryAnonIdGroup = document.getElementById('monetaryAnonIdGroup');
+            var monetaryNameInput = document.getElementById('monetaryName');
+            var monetaryEmailInput = document.getElementById('monetaryEmail');
+
+            if (monetaryAnonymous) {
+                monetaryAnonymous.addEventListener('change', function() {
+                    if (this.checked) {
+                        monetaryNameGroup.style.display = 'none';
+                        monetaryEmailGroup.style.display = 'none';
+                        monetaryAnonIdGroup.style.display = 'block';
+                        monetaryNameInput.value = '';
+                        monetaryEmailInput.value = '';
+                        monetaryNameInput.removeAttribute('required');
+                        monetaryEmailInput.removeAttribute('required');
+                    } else {
+                        monetaryNameGroup.style.display = 'block';
+                        monetaryEmailGroup.style.display = 'block';
+                        monetaryAnonIdGroup.style.display = 'none';
+                    }
+                });
+            }
+
+            // Goods form handling
+            var goodsAnonymous = document.getElementById('goodsAnonymous');
+            var goodsNameGroup = document.getElementById('goodsNameGroup');
+            var goodsEmailGroup = document.getElementById('goodsEmailGroup');
+            var goodsAnonIdGroup = document.getElementById('goodsAnonIdGroup');
+            var goodsNameInput = document.getElementById('goodsName');
+            var goodsEmailInput = document.getElementById('goodsEmail');
+
+            if (goodsAnonymous) {
+                goodsAnonymous.addEventListener('change', function() {
+                    if (this.checked) {
+                        goodsNameGroup.style.display = 'none';
+                        goodsEmailGroup.style.display = 'none';
+                        goodsAnonIdGroup.style.display = 'block';
+                        goodsNameInput.value = '';
+                        goodsEmailInput.value = '';
+                        goodsNameInput.removeAttribute('required');
+                        goodsEmailInput.removeAttribute('required');
+                    } else {
+                        goodsNameGroup.style.display = 'block';
+                        goodsEmailGroup.style.display = 'block';
+                        goodsAnonIdGroup.style.display = 'none';
+                    }
+                });
+            }
+
+            // Email validation for monetary form
+            var monetaryForm = document.getElementById('monetaryForm');
+            if (monetaryForm) {
+                monetaryForm.addEventListener('submit', function(e) {
+                    if (!monetaryAnonymous.checked) {
+                        var email = monetaryEmailInput.value.trim();
+                        if (email && !emailRegex.test(email)) {
+                            e.preventDefault();
+                            alert('Please enter a valid email address (e.g., name@@example.com)');
+                            monetaryEmailInput.focus();
+                            return false;
+                        }
+                    }
+                });
+            }
+
+            // Email validation for goods form
+            var goodsForm = document.getElementById('goodsForm');
+            if (goodsForm) {
+                goodsForm.addEventListener('submit', function(e) {
+                    if (!goodsAnonymous.checked) {
+                        var email = goodsEmailInput.value.trim();
+                        if (email && !emailRegex.test(email)) {
+                            e.preventDefault();
+                            alert('Please enter a valid email address (e.g., name@@example.com)');
+                            goodsEmailInput.focus();
+                            return false;
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+}

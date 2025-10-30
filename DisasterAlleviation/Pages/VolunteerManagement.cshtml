@@ -1,0 +1,68 @@
+﻿@page
+@model DisasterAlleviation.Pages.VolunteerManagementModel
+@{
+    ViewData["Title"] = "Volunteer Management";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Skills</th>
+            <th>Availability</th>
+            <th>Assign Task</th>
+            <th>Match to Incident</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var volunteer in Model.Volunteers)
+        {
+            <tr>
+                <td>@volunteer.Name</td>
+                <td>@volunteer.Skills</td>
+                <td>@volunteer.Availability.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (volunteer.IsTaskAssigned)
+                    {
+                        <span class="text-success">Assigned: @volunteer.Task.Description</span>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="AssignTask">
+                            <input type="hidden" name="VolunteerId" value="@volunteer.Id" />
+                            <select name="TaskId" class="form-control">
+                                <option value="">Select Task</option>
+                                <option value="">First Aid</option>
+                                <option value="">Clean up</option>
+                                <option value="">Food Distribution</option>
+                                <option value="">Housing Reallocation</option>
+                                @foreach (var task in Model.Tasks)
+                                {
+                                    <option value="@task.Id">@task.Description</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-primary">Assign Task</button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <form method="post" asp-page-handler="MatchIncident">
+                        <input type="hidden" name="VolunteerId" value="@volunteer.Id" />
+                        <select name="IncidentId" class="form-control">
+                            <option value="">Select Incident</option>
+                            
+                            @foreach (var incident in Model.Incidents)
+                            {
+                                <option value="@incident.IncidentId">@incident.IncidentType - @incident.Location</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Match Incident</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

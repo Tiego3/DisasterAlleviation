@@ -1,0 +1,182 @@
+﻿@page
+@model DisasterAlleviation.Pages.AdminDashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- HERO HEADER -->
+<section class="dashboard-hero text-white py-5 mb-4">
+    <div class="container text-center">
+        <h1 class="fw-bold mb-2">Admin Dashboard</h1>
+        <p class="lead mb-0">Manage donations, disasters, and resource allocation</p>
+    </div>
+</section>
+
+<!-- SUMMARY CARDS -->
+<div class="container mb-5">
+    <div class="row text-center g-4">
+        <div class="col-md-3">
+            <div class="summary-card bg-success-subtle shadow-sm p-4 rounded-4">
+                <h3 class="fw-bold text-success">${@Model.TotalMonetary}</h3>
+                <p class="mb-0 text-muted">Pending Allocation</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-primary-subtle shadow-sm p-4 rounded-4">
+                <h3 class="fw-bold text-primary">@Model.TotalGoods</h3>
+                <p class="mb-0 text-muted">Goods Available</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-danger-subtle shadow-sm p-4 rounded-4">
+                <h3 class="fw-bold text-danger">4</h3>
+                <p class="mb-0 text-muted">Active Disasters</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card bg-secondary-subtle shadow-sm p-4 rounded-4">
+                <h3 class="fw-bold text-secondary">@Model.TotalDonors</h3>
+                <p class="mb-0 text-muted">New Donors Today</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN FUNCTIONS -->
+<section class="admin-functions py-4">
+    <div class="container">
+        <h3 class="text-center fw-bold mb-4">Admin Functions</h3>
+        <p class="text-center text-muted mb-5">Manage all aspects of donation tracking and disaster response</p>
+
+        <div class="row g-4">
+            <!-- Row 1 -->
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-success fs-2">💵</div>
+                    <h5 class="fw-bold mb-2">Capture Monetary Donation</h5>
+                    <p class="text-muted small">Record new monetary donations from donors</p>
+                    <a asp-page="/MonetaryDonations/Create" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-primary fs-2">📦</div>
+                    <h5 class="fw-bold mb-2">Capture Goods Donation</h5>
+                    <p class="text-muted small">Record new goods donations with categories</p>
+                    <a asp-page="/GoodsDonations/Create" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-danger fs-2">⚠️</div>
+                    <h5 class="fw-bold mb-2">Register New Disaster</h5>
+                    <p class="text-muted small">Create entry for new disaster requiring aid</p>
+                    <a asp-page="/Disasters/Create" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-secondary fs-2">⚙️</div>
+                    <h5 class="fw-bold mb-2">Manage Categories</h5>
+                    <p class="text-muted small">Define new categories for goods donations</p>
+                    <a asp-page="/Categories/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-primary fs-2">📊</div>
+                    <h5 class="fw-bold mb-2">View All Donations</h5>
+                    <p class="text-muted small">Browse all monetary and goods donations</p>
+                    <a asp-page="/MonetaryDonations/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-warning fs-2">📋</div>
+                    <h5 class="fw-bold mb-2">Allocate Resources</h5>
+                    <p class="text-muted small">Assign money and goods to active disasters</p>
+                    <a asp-page="/Resources/Allocate" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-danger fs-2">🌪️</div>
+                    <h5 class="fw-bold mb-2">View All Disasters</h5>
+                    <p class="text-muted small">Monitor active and past disaster responses</p>
+                    <a asp-page="/Disasters/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-info fs-2">🙋</div>
+                    <h5 class="fw-bold mb-2">View All Volunteers</h5>
+                    <p class="text-muted small">Manage volunteer applications and approvals</p>
+                    <a asp-page="/Volunteers/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
+                    <div class="icon mb-3 text-success fs-2">🚚</div>
+                    <h5 class="fw-bold mb-2">Manage Goods Drop-offs</h5>
+                    <p class="text-muted small">View and confirm scheduled goods donations</p>
+                    <a asp-page="/GoodsDropoffs/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        /* Header Gradient */
+        .dashboard-hero {
+            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+        }
+
+        /* Buttons */
+        .btn-gradient {
+            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Function cards */
+        .function-card {
+            background-color: #fff;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .function-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .summary-card {
+            border-radius: 16px;
+            font-size: 1.1rem;
+        }
+
+        .summary-card h3 {
+            font-size: 1.8rem;
+        }
+    </style>
+}

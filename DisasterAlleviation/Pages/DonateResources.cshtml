@@ -1,0 +1,64 @@
+﻿@page
+@model DisasterAlleviation.Pages.DonateResourcesModel
+@{
+    ViewData["Title"] = "Donate Resources";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Input.ResourceType">Resource Type</label>
+        <select asp-for="Input.ResourceType" class="form-control" id="resourceTypeDropdown" onchange="toggleOtherResourceInput()">
+            <option value="">Select Resource Type</option>
+            <option value="Food">Food</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Medical Supplies">Medical Supplies</option>
+            <option value="Money">Money</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="Input.ResourceType" class="text-danger"></span>
+    </div>
+        
+
+    <div class="form-group">
+        <label asp-for="Input.NameOfItem">Name of Item</label>
+        <input asp-for="Input.NameOfItem" class="form-control" />
+        <span asp-validation-for="Input.NameOfItem" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Date"></label>
+        <input asp-for="Input.Date" class="form-control" type="date" />
+        <span asp-validation-for="Input.Date" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.NumberOfItems">Number Of Items</label>
+        <input asp-for="Input.NumberOfItems" class="form-control" type="number" min="1" />
+        <span asp-validation-for="Input.NumberOfItems" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description" class="form-control"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Donate</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>        
+
+        function showConfirmation() {
+
+            alert("Donations has been submitted successfully.");
+            return true;
+        }
+
+    </script>
+}
+

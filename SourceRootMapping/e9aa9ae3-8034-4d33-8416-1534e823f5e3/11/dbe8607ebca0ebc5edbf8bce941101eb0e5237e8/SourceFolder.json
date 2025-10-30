@@ -1,0 +1,26 @@
+﻿{
+  "build_artifactstagingdirectory": "1\\a",
+  "agent_builddirectory": "1",
+  "collectionUrl": "https://dev.azure.com/ST10102873/",
+  "definitionName": "DisasterAlleviation",
+  "repositoryTrackingInfo": [
+    {
+      "identifier": "self",
+      "repositoryType": "Git",
+      "repositoryUrl": "https://ST10102873@dev.azure.com/ST10102873/Gift%20of%20the%20Givers%20Foundation/_git/DisasterAlleviation",
+      "sourcesDirectory": "1\\s\\DisasterAlleviation"
+    }
+  ],
+  "fileFormatVersion": 3,
+  "lastRunOn": "11/04/2024 17:46:54 +00:00",
+  "repositoryType": "Git",
+  "lastMaintenanceAttemptedOn": "",
+  "lastMaintenanceCompletedOn": "",
+  "build_sourcesdirectory": "1\\s",
+  "common_testresultsdirectory": "1\\TestResults",
+  "collectionId": "e9aa9ae3-8034-4d33-8416-1534e823f5e3",
+  "definitionId": "11",
+  "hashKey": "dbe8607ebca0ebc5edbf8bce941101eb0e5237e8",
+  "repositoryUrl": "https://ST10102873@dev.azure.com/ST10102873/Gift%20of%20the%20Givers%20Foundation/_git/DisasterAlleviation",
+  "system": "build"
+}

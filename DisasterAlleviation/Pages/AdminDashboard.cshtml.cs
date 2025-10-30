@@ -16,7 +16,7 @@ namespace DisasterAlleviation.Pages
         public int TotalDonors { get; set; }
 
         public AdminDashboardModel(ApplicationDbContext context)
-        {
+    {
             _context = context;
         }
 

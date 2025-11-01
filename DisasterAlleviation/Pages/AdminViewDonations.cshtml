@@ -1,0 +1,160 @@
+﻿@page
+@model DisasterAlleviation.Pages.AdminViewDonationsModel
+@{
+    ViewData["Title"] = "View All Donations";
+}
+
+<div class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="/AdminDashboard" class="btn btn-link text-decoration-none me-3">⬅ Back</a>
+        <div>
+            <h2 class="fw-bold mb-0">View All Donations</h2>
+            <p class="text-muted mb-0">Browse and filter all monetary and goods donations</p>
+        </div>
+    </div>
+
+    <!-- Filters Toolbar -->
+    <form method="get" class="card p-3 shadow-sm mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Search Donor</label>
+                <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Enter donor name..." />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Sort By</label>
+                <select name="SortBy" class="form-select">
+                    <option value="date" selected="@("date" == Model.SortBy)">Date</option>
+                    <option value="donor" selected="@("donor" == Model.SortBy)">Donor</option>
+                    <option value="amount" selected="@("amount" == Model.SortBy)">Amount</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Order</label>
+                <select name="SortOrder" class="form-select">
+                    <option value="asc" selected="@("asc" == Model.SortOrder)">Ascending</option>
+                    <option value="desc" selected="@("desc" == Model.SortOrder)">Descending</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">From Date</label>
+                <input type="date" name="FromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">To Date</label>
+                <input type="date" name="ToDate" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+
+            <div class="col-md-1 d-grid">
+                <button type="submit" class="btn btn-primary fw-semibold">Apply</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="donationTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="monetary-tab" data-bs-toggle="tab" data-bs-target="#monetary" type="button" role="tab">
+                💰 Monetary (@Model.MonetaryDonations.Count)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="goods-tab" data-bs-toggle="tab" data-bs-target="#goods" type="button" role="tab">
+                🎁 Goods (@Model.GoodsDonations.Count)
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Monetary Donations -->
+        <div class="tab-pane fade show active" id="monetary" role="tabpanel">
+            @if (Model.MonetaryDonations.Any())
+            {
+                <table class="table table-striped align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Donor</th>
+                            <th>Amount (R)</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donation in Model.MonetaryDonations)
+                        {
+                            <tr>
+                                <td>@(donation.Donor?.IsAnonymous == true ? "Anonymous" : donation.DonorName)</td>
+                                <td>@donation.Amount.ToString("N2")</td>
+                                <td>@DateTime.Now.ToString("dd/MM/yy")</td> <!-- replace with donation.DateDonated -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No monetary donations found.</p>
+            }
+        </div>
+
+        <!-- Goods Donations -->
+        <div class="tab-pane fade" id="goods" role="tabpanel">
+            @if (Model.GoodsDonations.Any())
+            {
+                <table class="table table-striped align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Donor</th>
+                            <th>Category</th>
+                            <th>Items</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donation in Model.GoodsDonations)
+                        {
+                            <tr>
+                                <td>@(donation.Donor?.IsAnonymous == true ? "Anonymous" : donation.DonorName)</td>
+                                <td>@donation.Category?.Name</td>
+                                <td>@donation.ItemsCount</td>
+                                <td>@donation.Description</td>
+                                <td>@DateTime.Now.ToString("dd/MM/yy")</td> <!-- replace with donation.DateDonated -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No goods donations found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .btn-primary {
+            background: linear-gradient(90deg, #5b3df5, #8c49ff);
+            border: none;
+        }
+
+            .btn-primary:hover {
+                opacity: 0.9;
+            }
+
+        .nav-tabs .nav-link.active {
+            font-weight: 600;
+            color: #5b3df5;
+            border-color: #5b3df5 #5b3df5 #fff;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+}

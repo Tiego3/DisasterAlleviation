@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using System.ComponentModel.DataAnnotations;
+using DisasterAlleviation.Models.Forms;
 
 namespace DisasterAlleviation.Pages
 {
@@ -21,6 +21,8 @@ namespace DisasterAlleviation.Pages
         public GoodsDonationForm GoodsForm { get; set; } = new();
 
         public List<Category> Categories { get; set; } = new();
+
+        public string ActiveTab { get; set; } = "monetary"; // Default tab
 
         public DonateModel(ApplicationDbContext context)
         {
@@ -39,8 +41,9 @@ namespace DisasterAlleviation.Pages
                 };
         }
 
-        public void OnGet()
+        public void OnGet(string? tab)
         {
+            // Ensure categories exist
             if (!_context.Categories.Any())
             {
                 _context.Categories.AddRange(
@@ -54,6 +57,12 @@ namespace DisasterAlleviation.Pages
             }
 
             Categories = _context.Categories.ToList();
+
+            // Handle tab query string (?tab=goods or ?tab=monetary)
+            if (!string.IsNullOrEmpty(tab))
+            {
+                ActiveTab = tab.ToLower() == "goods" ? "goods" : "monetary";
+            }
         }
 
         // -------------------------
@@ -61,44 +70,32 @@ namespace DisasterAlleviation.Pages
         // -------------------------
         public async Task<IActionResult> OnPostMonetaryDonationAsync()
         {
-            // Remove validation errors for fields that aren't required based on IsAnonymous
             if (MonetaryForm.IsAnonymous)
             {
                 ModelState.Remove("MonetaryForm.DonorName");
                 ModelState.Remove("MonetaryForm.Email");
             }
 
-            // Validate required fields
             if (MonetaryForm.Amount <= 0)
             {
                 ModelState.AddModelError("MonetaryForm.Amount", "Please enter a valid donation amount.");
             }
 
-            // Validate name and email if not anonymous
             if (!MonetaryForm.IsAnonymous)
             {
                 if (string.IsNullOrWhiteSpace(MonetaryForm.DonorName))
-                {
                     ModelState.AddModelError("MonetaryForm.DonorName", "Name is required.");
-                }
 
                 if (string.IsNullOrWhiteSpace(MonetaryForm.Email))
-                {
                     ModelState.AddModelError("MonetaryForm.Email", "Email is required.");
-                }
-                else
-                {
-                    var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^\s@]+@[^\s@]+\.[^\s@]+$");
-                    if (!emailRegex.IsMatch(MonetaryForm.Email))
-                    {
-                        ModelState.AddModelError("MonetaryForm.Email", "Please enter a valid email address.");
-                    }
-                }
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(MonetaryForm.Email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
+                    ModelState.AddModelError("MonetaryForm.Email", "Please enter a valid email address.");
             }
 
             if (!ModelState.IsValid)
             {
                 PopulateCategories();
+                ActiveTab = "monetary";
                 return Page();
             }
 
@@ -114,24 +111,23 @@ namespace DisasterAlleviation.Pages
                 {
                     DonorName = donor.IsAnonymous ? "Anonymous" : donor.Name ?? "",
                     Amount = MonetaryForm.Amount,
-                    DonorId = donor.Id
+                    DonorId = donor.Id,
+                    DateDonated = DateTime.Now
                 };
 
                 _context.MonetaryDonations.Add(donation);
                 await _context.SaveChangesAsync();
 
-                // If anonymous and new, show their ID after donation
                 if (donor.IsAnonymous && !string.IsNullOrEmpty(donor.AnonymousId))
-                {
                     TempData["AnonId"] = donor.AnonymousId;
-                }
 
                 return RedirectToPage("/Index");
             }
-            catch (Exception ex)
+            catch
             {
                 ModelState.AddModelError("", "An error occurred while processing your donation. Please try again.");
                 PopulateCategories();
+                ActiveTab = "monetary";
                 return Page();
             }
         }
@@ -141,54 +137,36 @@ namespace DisasterAlleviation.Pages
         // -------------------------
         public async Task<IActionResult> OnPostGoodsDonationAsync()
         {
-            // Remove validation errors for fields that aren't required based on IsAnonymous
             if (GoodsForm.IsAnonymous)
             {
                 ModelState.Remove("GoodsForm.DonorName");
                 ModelState.Remove("GoodsForm.Email");
             }
 
-            // Validate required fields
             if (GoodsForm.CategoryId <= 0)
-            {
                 ModelState.AddModelError("GoodsForm.CategoryId", "Please select a category.");
-            }
 
             if (GoodsForm.ItemsCount <= 0)
-            {
                 ModelState.AddModelError("GoodsForm.ItemsCount", "Please enter the number of items.");
-            }
 
             if (string.IsNullOrWhiteSpace(GoodsForm.Description))
-            {
                 ModelState.AddModelError("GoodsForm.Description", "Please provide a description.");
-            }
 
-            // Validate name and email if not anonymous
             if (!GoodsForm.IsAnonymous)
             {
                 if (string.IsNullOrWhiteSpace(GoodsForm.DonorName))
-                {
                     ModelState.AddModelError("GoodsForm.DonorName", "Name is required.");
-                }
 
                 if (string.IsNullOrWhiteSpace(GoodsForm.Email))
-                {
                     ModelState.AddModelError("GoodsForm.Email", "Email is required.");
-                }
-                else
-                {
-                    var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^\s@]+@[^\s@]+\.[^\s@]+$");
-                    if (!emailRegex.IsMatch(GoodsForm.Email))
-                    {
-                        ModelState.AddModelError("GoodsForm.Email", "Please enter a valid email address.");
-                    }
-                }
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(GoodsForm.Email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"))
+                    ModelState.AddModelError("GoodsForm.Email", "Please enter a valid email address.");
             }
 
             if (!ModelState.IsValid)
             {
                 PopulateCategories();
+                ActiveTab = "goods";
                 return Page();
             }
 
@@ -206,41 +184,39 @@ namespace DisasterAlleviation.Pages
                     CategoryId = GoodsForm.CategoryId,
                     ItemsCount = GoodsForm.ItemsCount,
                     Description = GoodsForm.Description,
-                    DonorId = donor.Id
+                    DonorId = donor.Id,
+                    DateDonated = DateTime.Now
                 };
 
                 _context.GoodsDonations.Add(goods);
                 await _context.SaveChangesAsync();
 
                 if (donor.IsAnonymous && !string.IsNullOrEmpty(donor.AnonymousId))
-                {
                     TempData["AnonId"] = donor.AnonymousId;
-                }
 
                 return RedirectToPage("/Index");
             }
-            catch (Exception ex)
+            catch
             {
                 ModelState.AddModelError("", "An error occurred while processing your donation. Please try again.");
                 PopulateCategories();
+                ActiveTab = "goods";
                 return Page();
             }
         }
 
-        // Helper method for both forms
+        // -------------------------
+        // Helper
+        // -------------------------
         private async Task<Donor> FindOrCreateDonorAsync(bool isAnon, string? name, string? email, string? anonId)
         {
             Donor? donor = null;
 
             if (isAnon)
             {
-                // Check if returning anonymous donor
                 if (!string.IsNullOrEmpty(anonId))
-                {
                     donor = _context.Donors.FirstOrDefault(d => d.AnonymousId == anonId);
-                }
 
-                // Create new anonymous donor if not found
                 if (donor == null)
                 {
                     donor = new Donor
@@ -255,7 +231,6 @@ namespace DisasterAlleviation.Pages
             }
             else
             {
-                // Find or create named donor
                 donor = _context.Donors.FirstOrDefault(d => d.Email == email && !d.IsAnonymous);
                 if (donor == null)
                 {
@@ -272,25 +247,5 @@ namespace DisasterAlleviation.Pages
 
             return donor;
         }
-    }
-
-    public class MonetaryDonationForm
-    {
-        public bool IsAnonymous { get; set; }
-        public string? DonorName { get; set; }
-        public string? Email { get; set; }
-        public string? AnonymousId { get; set; }
-        public decimal Amount { get; set; }
-    }
-
-    public class GoodsDonationForm
-    {
-        public bool IsAnonymous { get; set; }
-        public string? DonorName { get; set; }
-        public string? Email { get; set; }
-        public string? AnonymousId { get; set; }
-        public int CategoryId { get; set; }
-        public int ItemsCount { get; set; }
-        public string? Description { get; set; }
     }
 }

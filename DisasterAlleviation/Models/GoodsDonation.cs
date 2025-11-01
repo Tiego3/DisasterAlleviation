@@ -23,7 +23,10 @@ namespace DisasterAlleviation.Models
 
         [Required]
         public string Description { get; set; } = string.Empty;
-        public int DonorId { get; set; } // NEW
+        public int DonorId { get; set; } 
         public Donor Donor { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime DateDonated { get; set; } = DateTime.Now;
     }
 }

@@ -14,5 +14,8 @@ namespace DisasterAlleviation.Models
         public decimal Amount { get; set; }
         public int DonorId { get; set; } // NEW
         public Donor Donor { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime DateDonated { get; set; } = DateTime.Now;
     }
 }

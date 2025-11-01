@@ -17,15 +17,19 @@
         </div>
     }
 
-    <!-- Tab Navigation -->
+    <!-- Tabs -->
     <ul class="nav nav-tabs justify-content-center mb-4" id="donationTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="monetary-tab" data-bs-toggle="tab" data-bs-target="#monetary" type="button" role="tab" aria-controls="monetary" aria-selected="true">
+            <button class="nav-link @(Model.ActiveTab == "monetary" ? "active" : "")"
+                    id="monetary-tab" data-bs-toggle="tab" data-bs-target="#monetary"
+                    type="button" role="tab" aria-controls="monetary" aria-selected="@(Model.ActiveTab == "monetary")">
                 Monetary Donation
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="goods-tab" data-bs-toggle="tab" data-bs-target="#goods" type="button" role="tab" aria-controls="goods" aria-selected="false">
+            <button class="nav-link @(Model.ActiveTab == "goods" ? "active" : "")"
+                    id="goods-tab" data-bs-toggle="tab" data-bs-target="#goods"
+                    type="button" role="tab" aria-controls="goods" aria-selected="@(Model.ActiveTab == "goods")">
                 Goods Donation
             </button>
         </li>
@@ -33,8 +37,8 @@
 
     <!-- Tab Content -->
     <div class="tab-content">
-        <!-- Monetary Donation Tab -->
-        <div class="tab-pane fade show active" id="monetary" role="tabpanel" aria-labelledby="monetary-tab">
+        <!-- Monetary -->
+        <div class="tab-pane fade @(Model.ActiveTab == "monetary" ? "show active" : "")" id="monetary" role="tabpanel">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card p-4 shadow-sm">
@@ -42,31 +46,29 @@
                         <form method="post" asp-page-handler="MonetaryDonation" id="monetaryForm">
                             <div class="form-check mb-3">
                                 <input asp-for="MonetaryForm.IsAnonymous" class="form-check-input" type="checkbox" id="monetaryAnonymous" />
-                                <label asp-for="MonetaryForm.IsAnonymous" class="form-check-label" for="monetaryAnonymous">
-                                    Donate Anonymously
-                                </label>
+                                <label asp-for="MonetaryForm.IsAnonymous" class="form-check-label">Donate Anonymously</label>
                             </div>
 
                             <div class="mb-3" id="monetaryNameGroup">
-                                <label asp-for="MonetaryForm.DonorName" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                <input asp-for="MonetaryForm.DonorName" class="form-control" id="monetaryName" placeholder="Enter your name" />
+                                <label asp-for="MonetaryForm.DonorName" class="form-label">Full Name *</label>
+                                <input asp-for="MonetaryForm.DonorName" class="form-control" id="monetaryName" />
                                 <span asp-validation-for="MonetaryForm.DonorName" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3" id="monetaryEmailGroup">
-                                <label asp-for="MonetaryForm.Email" class="form-label">Email <span class="text-danger">*</span></label>
-                                <input asp-for="MonetaryForm.Email" class="form-control" id="monetaryEmail" placeholder="name@example.com" />
+                                <label asp-for="MonetaryForm.Email" class="form-label">Email *</label>
+                                <input asp-for="MonetaryForm.Email" class="form-control" id="monetaryEmail" />
                                 <span asp-validation-for="MonetaryForm.Email" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3" id="monetaryAnonIdGroup" style="display:none;">
                                 <label asp-for="MonetaryForm.AnonymousId" class="form-label">Anonymous ID (if returning)</label>
-                                <input asp-for="MonetaryForm.AnonymousId" class="form-control" placeholder="Optional" />
+                                <input asp-for="MonetaryForm.AnonymousId" class="form-control" />
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="MonetaryForm.Amount" class="form-label">Donation Amount (R) <span class="text-danger">*</span></label>
-                                <input asp-for="MonetaryForm.Amount" class="form-control" type="number" step="0.01" min="1" required />
+                                <label asp-for="MonetaryForm.Amount" class="form-label">Amount (R) *</label>
+                                <input asp-for="MonetaryForm.Amount" class="form-control" type="number" min="1" step="0.01" />
                                 <span asp-validation-for="MonetaryForm.Amount" class="text-danger"></span>
                             </div>
 
@@ -77,8 +79,8 @@
             </div>
         </div>
 
-        <!-- Goods Donation Tab -->
-        <div class="tab-pane fade" id="goods" role="tabpanel" aria-labelledby="goods-tab">
+        <!-- Goods -->
+        <div class="tab-pane fade @(Model.ActiveTab == "goods" ? "show active" : "")" id="goods" role="tabpanel">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card p-4 shadow-sm">
@@ -86,45 +88,43 @@
                         <form method="post" asp-page-handler="GoodsDonation" id="goodsForm">
                             <div class="form-check mb-3">
                                 <input asp-for="GoodsForm.IsAnonymous" class="form-check-input" type="checkbox" id="goodsAnonymous" />
-                                <label asp-for="GoodsForm.IsAnonymous" class="form-check-label" for="goodsAnonymous">
-                                    Donate Anonymously
-                                </label>
+                                <label asp-for="GoodsForm.IsAnonymous" class="form-check-label">Donate Anonymously</label>
                             </div>
 
                             <div class="mb-3" id="goodsNameGroup">
-                                <label asp-for="GoodsForm.DonorName" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                <input asp-for="GoodsForm.DonorName" class="form-control" id="goodsName" placeholder="Enter your name" />
+                                <label asp-for="GoodsForm.DonorName" class="form-label">Full Name *</label>
+                                <input asp-for="GoodsForm.DonorName" class="form-control" id="goodsName" />
                                 <span asp-validation-for="GoodsForm.DonorName" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3" id="goodsEmailGroup">
-                                <label asp-for="GoodsForm.Email" class="form-label">Email <span class="text-danger">*</span></label>
-                                <input asp-for="GoodsForm.Email" class="form-control" id="goodsEmail" placeholder="name@example.com" />
+                                <label asp-for="GoodsForm.Email" class="form-label">Email *</label>
+                                <input asp-for="GoodsForm.Email" class="form-control" id="goodsEmail" />
                                 <span asp-validation-for="GoodsForm.Email" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3" id="goodsAnonIdGroup" style="display:none;">
                                 <label asp-for="GoodsForm.AnonymousId" class="form-label">Anonymous ID (if returning)</label>
-                                <input asp-for="GoodsForm.AnonymousId" class="form-control" placeholder="Optional" />
+                                <input asp-for="GoodsForm.AnonymousId" class="form-control" />
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="GoodsForm.CategoryId" class="form-label">Select Category <span class="text-danger">*</span></label>
-                                <select asp-for="GoodsForm.CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" class="form-select" required>
+                                <label asp-for="GoodsForm.CategoryId" class="form-label">Select Category *</label>
+                                <select asp-for="GoodsForm.CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" class="form-select">
                                     <option value="">-- Select a category --</option>
                                 </select>
                                 <span asp-validation-for="GoodsForm.CategoryId" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="GoodsForm.ItemsCount" class="form-label">Number of Items <span class="text-danger">*</span></label>
-                                <input asp-for="GoodsForm.ItemsCount" class="form-control" type="number" min="1" required />
+                                <label asp-for="GoodsForm.ItemsCount" class="form-label">Number of Items *</label>
+                                <input asp-for="GoodsForm.ItemsCount" class="form-control" type="number" min="1" />
                                 <span asp-validation-for="GoodsForm.ItemsCount" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="GoodsForm.Description" class="form-label">Description <span class="text-danger">*</span></label>
-                                <textarea asp-for="GoodsForm.Description" class="form-control" rows="3" placeholder="Describe your goods" required></textarea>
+                                <label asp-for="GoodsForm.Description" class="form-label">Description *</label>
+                                <textarea asp-for="GoodsForm.Description" class="form-control" rows="3"></textarea>
                                 <span asp-validation-for="GoodsForm.Description" class="text-danger"></span>
                             </div>
 
@@ -140,92 +140,42 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        (function() {
-            // Email validation regex
-            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        (function () {
+            const toggleGroups = (anonCheck, nameGroup, emailGroup, anonIdGroup, nameInput, emailInput) => {
+                if (anonCheck.checked) {
+                    nameGroup.style.display = 'none';
+                    emailGroup.style.display = 'none';
+                    anonIdGroup.style.display = 'block';
+                    nameInput.value = '';
+                    emailInput.value = '';
+                } else {
+                    nameGroup.style.display = 'block';
+                    emailGroup.style.display = 'block';
+                    anonIdGroup.style.display = 'none';
+                }
+            };
 
-            // Monetary form handling
-            var monetaryAnonymous = document.getElementById('monetaryAnonymous');
-            var monetaryNameGroup = document.getElementById('monetaryNameGroup');
-            var monetaryEmailGroup = document.getElementById('monetaryEmailGroup');
-            var monetaryAnonIdGroup = document.getElementById('monetaryAnonIdGroup');
-            var monetaryNameInput = document.getElementById('monetaryName');
-            var monetaryEmailInput = document.getElementById('monetaryEmail');
+            const monetaryAnon = document.getElementById('monetaryAnonymous');
+            const goodsAnon = document.getElementById('goodsAnonymous');
 
-            if (monetaryAnonymous) {
-                monetaryAnonymous.addEventListener('change', function() {
-                    if (this.checked) {
-                        monetaryNameGroup.style.display = 'none';
-                        monetaryEmailGroup.style.display = 'none';
-                        monetaryAnonIdGroup.style.display = 'block';
-                        monetaryNameInput.value = '';
-                        monetaryEmailInput.value = '';
-                        monetaryNameInput.removeAttribute('required');
-                        monetaryEmailInput.removeAttribute('required');
-                    } else {
-                        monetaryNameGroup.style.display = 'block';
-                        monetaryEmailGroup.style.display = 'block';
-                        monetaryAnonIdGroup.style.display = 'none';
-                    }
-                });
+            if (monetaryAnon) {
+                monetaryAnon.addEventListener('change', () =>
+                    toggleGroups(monetaryAnon,
+                        document.getElementById('monetaryNameGroup'),
+                        document.getElementById('monetaryEmailGroup'),
+                        document.getElementById('monetaryAnonIdGroup'),
+                        document.getElementById('monetaryName'),
+                        document.getElementById('monetaryEmail')));
             }
 
-            // Goods form handling
-            var goodsAnonymous = document.getElementById('goodsAnonymous');
-            var goodsNameGroup = document.getElementById('goodsNameGroup');
-            var goodsEmailGroup = document.getElementById('goodsEmailGroup');
-            var goodsAnonIdGroup = document.getElementById('goodsAnonIdGroup');
-            var goodsNameInput = document.getElementById('goodsName');
-            var goodsEmailInput = document.getElementById('goodsEmail');
-
-            if (goodsAnonymous) {
-                goodsAnonymous.addEventListener('change', function() {
-                    if (this.checked) {
-                        goodsNameGroup.style.display = 'none';
-                        goodsEmailGroup.style.display = 'none';
-                        goodsAnonIdGroup.style.display = 'block';
-                        goodsNameInput.value = '';
-                        goodsEmailInput.value = '';
-                        goodsNameInput.removeAttribute('required');
-                        goodsEmailInput.removeAttribute('required');
-                    } else {
-                        goodsNameGroup.style.display = 'block';
-                        goodsEmailGroup.style.display = 'block';
-                        goodsAnonIdGroup.style.display = 'none';
-                    }
-                });
-            }
-
-            // Email validation for monetary form
-            var monetaryForm = document.getElementById('monetaryForm');
-            if (monetaryForm) {
-                monetaryForm.addEventListener('submit', function(e) {
-                    if (!monetaryAnonymous.checked) {
-                        var email = monetaryEmailInput.value.trim();
-                        if (email && !emailRegex.test(email)) {
-                            e.preventDefault();
-                            alert('Please enter a valid email address (e.g., name@@example.com)');
-                            monetaryEmailInput.focus();
-                            return false;
-                        }
-                    }
-                });
-            }
-
-            // Email validation for goods form
-            var goodsForm = document.getElementById('goodsForm');
-            if (goodsForm) {
-                goodsForm.addEventListener('submit', function(e) {
-                    if (!goodsAnonymous.checked) {
-                        var email = goodsEmailInput.value.trim();
-                        if (email && !emailRegex.test(email)) {
-                            e.preventDefault();
-                            alert('Please enter a valid email address (e.g., name@@example.com)');
-                            goodsEmailInput.focus();
-                            return false;
-                        }
-                    }
-                });
+            if (goodsAnon) {
+                goodsAnon.addEventListener('change', () =>
+                    toggleGroups(goodsAnon,
+                        document.getElementById('goodsNameGroup'),
+                        document.getElementById('goodsEmailGroup'),
+                        document.getElementById('goodsAnonIdGroup'),
+                        document.getElementById('goodsName'),
+                        document.getElementById('goodsEmail')));
             }
         })();
     </script>

@@ -84,11 +84,13 @@ namespace DisasterAlleviation.Pages
                     break;
                 default: // "date"
                     monetaryQuery = descending
-                        ? monetaryQuery.OrderByDescending(d => d.Id)
-                        : monetaryQuery.OrderBy(d => d.Id);
+                        ? monetaryQuery.OrderByDescending(d => d.DateDonated)
+                        : monetaryQuery.OrderBy(d => d.DateDonated);
+                    
                     goodsQuery = descending
-                        ? goodsQuery.OrderByDescending(d => d.Id)
-                        : goodsQuery.OrderBy(d => d.Id);
+                        ? goodsQuery.OrderByDescending(d => d.DateDonated)
+                        : goodsQuery.OrderBy(d => d.DateDonated);
+
                     break;
             }
 

@@ -87,7 +87,7 @@
                             <tr>
                                 <td>@(donation.Donor?.IsAnonymous == true ? "Anonymous" : donation.DonorName)</td>
                                 <td>@donation.Amount.ToString("N2")</td>
-                                <td>@DateTime.Now.ToString("dd/MM/yy")</td> <!-- replace with donation.DateDonated -->
+                                <td>@donation.DateDonated.ToString("dd/MM/yy")</td>
                             </tr>
                         }
                     </tbody>

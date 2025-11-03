@@ -1,44 +1,106 @@
 ﻿@page
 @model DisasterAlleviation.Pages.VolunteerModel
 @{
-    ViewData["Title"] = "Volunteer Registration";
+    ViewData["Title"] = "Become a Volunteer";
 }
 
-<h2>@ViewData["Title"]</h2>
+<section class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Become a Volunteer</h1>
+        <p class="lead text-muted">
+            Join our team of dedicated volunteers and make a difference in disaster relief efforts.
+            Your time and skills can save lives and rebuild communities.
+        </p>
+    </div>
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Input.Name"></label>
-        <input asp-for="Input.Name" class="form-control" />
-        <span asp-validation-for="Input.Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.ContactInfo"></label>
-        <input asp-for="Input.ContactInfo" class="form-control" />
-        <span asp-validation-for="Input.ContactInfo" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.Skills"></label>
-        <input asp-for="Input.Skills" class="form-control" />
-        <span asp-validation-for="Input.Skills" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.Availability"></label>
-        <input asp-for="Input.Availability" class="form-control" />
-        <span asp-validation-for="Input.Availability" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <form method="post" class="shadow p-4 rounded bg-white">
+        <h4 class="mb-3 text-primary"><i class="bi bi-person-heart"></i> Volunteer Application</h4>
 
-@if (!ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <strong>Form submission failed:</strong>
-        <ul>
-            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
+        <!-- Personal Information -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Input.FullName" class="form-label fw-semibold"></label>
+                <input asp-for="Input.FullName" class="form-control" placeholder="Enter your full name" />
+                <span asp-validation-for="Input.FullName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Input.Email" class="form-label fw-semibold"></label>
+                <input asp-for="Input.Email" class="form-control" placeholder="your.email@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Input.PhoneNumber" class="form-label fw-semibold"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="+1 (555) 123-4567" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Input.Location" class="form-label fw-semibold"></label>
+                <input asp-for="Input.Location" class="form-control" placeholder="Enter your city" />
+                <span asp-validation-for="Input.Location" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Availability & Skills -->
+        <div class="mb-3">
+            <label asp-for="Input.Availability" class="form-label fw-semibold"></label>
+            <select asp-for="Input.Availability" class="form-select">
+                <option value="">Select your availability</option>
+                <option>Morning (6AM - 12PM)</option>
+                <option>Afternoon (12PM - 6PM)</option>
+                <option>Evening (6PM - 10PM)</option>
+                <option>Weekdays</option>
+                <option>Weekends</option>
+            </select>
+            <span asp-validation-for="Input.Availability" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Skills" class="form-label fw-semibold"></label>
+            <textarea asp-for="Input.Skills" class="form-control" placeholder="e.g., medical training, logistics, translation..." rows="2"></textarea>
+            <span asp-validation-for="Input.Skills" class="text-danger"></span>
+        </div>
+
+        <!-- Previous Experience -->
+        <div class="mb-3">
+            <label asp-for="Input.PreviousExperience" class="form-label fw-semibold"></label>
+            <textarea asp-for="Input.PreviousExperience" class="form-control" placeholder="Tell us about your past volunteer work..." rows="2"></textarea>
+        </div>
+
+        <!-- Available Dates -->
+        <div class="mb-3">
+            <label asp-for="Input.AvailableDates" class="form-label fw-semibold"></label>
+            <input asp-for="Input.AvailableDates" type="date" class="form-control" />
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mb-3">
+            <label asp-for="Input.EmergencyContact" class="form-label fw-semibold"></label>
+            <input asp-for="Input.EmergencyContact" class="form-control" placeholder="Name and phone number" />
+            <span asp-validation-for="Input.EmergencyContact" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-2">
+            <input asp-for="Input.HasTransportation" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" asp-for="Input.HasTransportation">I have reliable transportation</label>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="Input.WillingToTravel" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" asp-for="Input.WillingToTravel">I am willing to travel for disaster response</label>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Input.AdditionalInfo" class="form-label fw-semibold"></label>
+            <textarea asp-for="Input.AdditionalInfo" class="form-control" placeholder="Any motivation, special circumstances, or questions..." rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Submit Volunteer Application</button>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

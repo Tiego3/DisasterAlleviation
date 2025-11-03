@@ -1,4 +1,4 @@
-using DisasterAlleviation.Data;
+﻿using DisasterAlleviation.Data;
 using DisasterAlleviation.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +9,13 @@ namespace DisasterAlleviation.Pages
 {
     public class VolunteerModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly ApplicationDbContext _context; // Inject DbContext
 
-        public VolunteerModel(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public VolunteerModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
+            _context = context;
             _userManager = userManager;
-            _context = context; // Initialize DbContext
         }
 
         [BindProperty]
@@ -23,43 +23,78 @@ namespace DisasterAlleviation.Pages
 
         public class InputModel
         {
-            [Required(ErrorMessage = "Name is required.")]
-            public string Name { get; set; }
+            [Required, Display(Name = "Full Name")]
+            public string FullName { get; set; }
 
-            [Required(ErrorMessage = "Contact information is required.")]
-            public string ContactInfo { get; set; }
+            [Required, EmailAddress, Display(Name = "Email Address")]
+            public string Email { get; set; }
 
-            [Required(ErrorMessage = "Skills are required.")]
+            [Required, Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
+
+            [Required, Display(Name = "Location")]
+            public string Location { get; set; }
+
+            [Required, Display(Name = "Availability")]
+            public string Availability { get; set; }
+
+            [Required, Display(Name = "Skills & Expertise")]
             public string Skills { get; set; }
 
-            [Required(ErrorMessage = "Availability is required.")]
-            public DateTime Availability { get; set; }
+            [Display(Name = "Previous Volunteer Experience")]
+            public string? PreviousExperience { get; set; }
+
+            [Display(Name = "Available Dates")]
+            [DataType(DataType.Date)]
+            public DateTime? AvailableDates { get; set; }
+
+            [Required, Display(Name = "Emergency Contact")]
+            public string EmergencyContact { get; set; }
+
+            [Display(Name = "I have reliable transportation")]
+            public bool HasTransportation { get; set; }
+
+            [Display(Name = "I am willing to travel for disaster response")]
+            public bool WillingToTravel { get; set; }
+
+            [Display(Name = "Additional Information")]
+            public string? AdditionalInfo { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
 
-            var user = await _userManager.GetUserAsync(User); 
+            var user = await _userManager.GetUserAsync(User);
 
-            // Create a new Volunteer record
             var volunteer = new Volunteer
             {
-                UserId = user.Id, 
-                Name = Input.Name,
-                ContactInfo = Input.ContactInfo,
-                Skills = Input.Skills,
+                UserId = user?.Id,
+                FullName = Input.FullName,
+                Email = Input.Email,
+                PhoneNumber = Input.PhoneNumber,
+                Location = Input.Location,
                 Availability = Input.Availability,
-               
+                Skills = Input.Skills,
+                PreviousExperience = Input.PreviousExperience,
+                AvailableDates = Input.AvailableDates,
+                EmergencyContact = Input.EmergencyContact,
+                HasTransportation = Input.HasTransportation,
+                WillingToTravel = Input.WillingToTravel,
+                AdditionalInfo = Input.AdditionalInfo,
+
+                // ✅ Set backend-only fields safely
+                Status = "Pending", // default when submitted
+                CanTravel = Input.WillingToTravel, // optional: mirror their willingness
+                DateApplied = DateTime.UtcNow
             };
 
-            // Save volunteer details to the database
             _context.Volunteers.Add(volunteer);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("VolunteerDashboard");
+            TempData["VolunteerSuccess"] = "Thank you! Your volunteer application has been successfully submitted.";
+
+            return RedirectToPage("/Index");
         }
     }
-
-
 }

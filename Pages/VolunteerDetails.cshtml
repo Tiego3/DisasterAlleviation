@@ -1,0 +1,91 @@
+﻿@page "{id:int}"
+@model DisasterAlleviation.Pages.Admin.VolunteerDetailsModel
+@{
+    ViewData["Title"] = "Volunteer Details";
+}
+
+<section class="py-4">
+    <a asp-page="/AdminVolunteerManagement" class="btn btn-link text-decoration-none me-3">← Back to Volunteer Management</a>
+
+    <div class="card shadow-sm p-4">
+        <h3 class="fw-bold mb-3">@Model.Volunteer.FullName</h3>
+        <p class="text-muted mb-4">@Model.Volunteer.Email</p>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <h6>Phone:</h6>
+                <p>@Model.Volunteer.PhoneNumber</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h6>Location:</h6>
+                <p>@Model.Volunteer.Location</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <h6>Availability:</h6>
+                <p>@Model.Volunteer.Availability</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h6>Date Available:</h6>
+                <p>@(Model.Volunteer.AvailableDates?.ToString("dd/MM/yyyy") ?? "Not specified")</p>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <h6>Skills:</h6>
+                <p>@Model.Volunteer.Skills</p>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <h6>Previous Experience:</h6>
+                <p>@(Model.Volunteer.PreviousExperience ?? "Not provided")</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <h6>Emergency Contact:</h6>
+                <p>@Model.Volunteer.EmergencyContact</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <h6>Transportation:</h6>
+                <p>@(Model.Volunteer.HasTransportation ? "Yes" : "No")</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <h6>Willing to Travel:</h6>
+                <p>@(Model.Volunteer.WillingToTravel ? "Yes" : "No")</p>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <h6>Additional Info:</h6>
+                <p>@(Model.Volunteer.AdditionalInfo ?? "None")</p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <span>
+                <strong>Status:</strong>
+                @if (Model.Volunteer.Status == "Approved")
+                {
+                    <span class="badge bg-success">Approved</span>
+                }
+                else if (Model.Volunteer.Status == "Pending")
+                {
+                    <span class="badge bg-warning text-dark">Pending</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Rejected</span>
+                }
+            </span>
+
+            <div>
+                <form method="post" asp-page-handler="Approve" asp-route-id="@Model.Volunteer.Id" class="d-inline">
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+                <form method="post" asp-page-handler="Reject" asp-route-id="@Model.Volunteer.Id" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

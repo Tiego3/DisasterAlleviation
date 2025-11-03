@@ -1,34 +1,38 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DisasterAlleviation.Models
 {
     public class Volunteer
     {
-        public int Id { get; set; } // Primary Key
-        public string UserId { get; set; } // Foreign Key to associate with IdentityUser
-       
-        [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string? UserId { get; set; }
 
-        [Required(ErrorMessage = "Contact Info is required")]
-        public string ContactInfo { get; set; }
+        [Required] public string FullName { get; set; }
+        [Required, EmailAddress] public string Email { get; set; }
+        [Required] public string PhoneNumber { get; set; }
+        [Required] public string Location { get; set; }
+        [Required] public string Availability { get; set; }
+        [Required] public string Skills { get; set; }
 
-        public string Skills { get; set; }
+        public string? PreviousExperience { get; set; }
 
-        [Required(ErrorMessage = "Availability is required")]
-        public DateTime Availability { get; set; }
-        //  public DateTime Date { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? AvailableDates { get; set; }
 
-        // Task and Incident Links
-        public int? TaskId { get; set; }
-        public TaskModel Task { get; set; }
+        [Required] public string EmergencyContact { get; set; }
 
-        public int? IncidentId { get; set; }
-        public IncidentReport Incident { get; set; }
-        public bool IsTaskAssigned => TaskId.HasValue;
+        public bool HasTransportation { get; set; }
+        public bool WillingToTravel { get; set; }
+        public string? AdditionalInfo { get; set; }
+
+        // ✅ Admin-only / system fields
+        [Required]
+        public string Status { get; set; } = "Pending";
+
+        public bool CanTravel { get; set; } = false;
+
+        [Display(Name = "Date Applied")]
+        public DateTime DateApplied { get; set; } = DateTime.UtcNow;
     }
-
-
-
 }

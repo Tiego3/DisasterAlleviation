@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DisasterAlleviation.Models
 {
@@ -34,5 +35,9 @@ namespace DisasterAlleviation.Models
 
         [Display(Name = "Date Applied")]
         public DateTime DateApplied { get; set; } = DateTime.UtcNow;
+
+        public int? DisasterId { get; set; }
+        public Disaster? Disaster { get; set; }
+
     }
 }

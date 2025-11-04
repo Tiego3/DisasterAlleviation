@@ -1,0 +1,205 @@
+﻿@page
+@model DisasterAlleviation.Pages.RegisterDisasterModel
+@{
+    ViewData["Title"] = "Register New Disaster";
+}
+
+<section class="register-disaster py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5">
+
+                    <!-- Back Button -->
+                    <div class="d-flex justify-content-start mb-3">
+                        <a asp-page="/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Back </a>
+                    </div>
+
+                    <h2 class="fw-bold text-center text-primary mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Register New Disaster
+                    </h2>
+
+                    <p class="text-center text-muted mb-4">
+                        Please fill in the details below to register a new disaster for aid allocation.
+                    </p>
+
+                    <form method="post" id="registerDisasterForm" novalidate>
+                        <!-- Type of Disaster dropdown -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.TypeOfDisaster" class="form-label fw-semibold">Type of Disaster</label>
+                            <select asp-for="Input.TypeOfDisaster" class="form-control form-control-lg" id="typeOfDisasterSelect" required onchange="toggleOtherDisaster()">
+                                <option value="">Select disaster type</option>
+                                <option>Flood</option>
+                                <option>Fire</option>
+                                <option>Earthquake</option>
+                                <option>Drought</option>
+                                <option>Epidemic</option>
+                                <option value="Other">Other</option>
+                            </select>
+
+                            <!-- Hidden input shown when 'Other' is selected -->
+                            <input type="text" id="otherDisasterInput" name="Input.OtherDisaster"
+                                   class="form-control form-control-lg mt-2"
+                                   placeholder="Specify other disaster type"
+                                   style="display:none;" />
+
+                            <span asp-validation-for="Input.TypeOfDisaster" class="text-danger small"></span>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.Location" class="form-label fw-semibold">Location</label>
+                            <input asp-for="Input.Location" class="form-control form-control-lg" placeholder="Enter disaster location" />
+                            <span asp-validation-for="Input.Location" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.Description" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Input.Description" rows="3" class="form-control form-control-lg" placeholder="Describe the disaster..."></textarea>
+                            <span asp-validation-for="Input.Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Input.StartDate" class="form-label fw-semibold">Start Date</label>
+                                <input asp-for="Input.StartDate" type="date" class="form-control form-control-lg" />
+                                <span asp-validation-for="Input.StartDate" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Input.EndDate" class="form-label fw-semibold">End Date</label>
+                                <input asp-for="Input.EndDate" type="date" class="form-control form-control-lg" />
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-semibold d-block mb-2">Required Aid Types</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (var type in Model.AidTypes)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="Input.RequiredAidTypes" value="@type" id="@type.Replace(" ", "")">
+                                        <label class="form-check-label" for="@type.Replace(" ", "")">@type</label>
+                                    </div>
+                                }
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="otherAidCheck" onclick="toggleOtherAid()" />
+                                    <label class="form-check-label" for="otherAidCheck">Other</label>
+                                </div>
+                            </div>
+                            <input type="text" id="otherAidInput" name="Input.OtherAid" class="form-control mt-2" placeholder="Specify other aid type" style="display:none;" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-gradient btn-lg fw-semibold">
+                                <i class="bi bi-check-circle me-2"></i> Register Disaster
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section Styles {
+    <style>
+        .register-disaster {
+            background: linear-gradient(180deg, #f9f9ff 0%, #ffffff 100%);
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+        }
+
+        .form-control, .form-check-label {
+            font-size: 1rem;
+        }
+
+
+        .back-btn {
+            font-size: 0.9rem;
+        }
+    </style>
+}
+
+<script>
+    function toggleOtherAid() {
+        const checkbox = document.getElementById("otherAidCheck");
+        const input = document.getElementById("otherAidInput");
+        input.style.display = checkbox.checked ? "block" : "none";
+    }
+
+    // read csrf token (Layout defines it)
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    document.getElementById("registerDisasterForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+
+        // POST to the same page
+        const response = await fetch(form.action || window.location.href, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "RequestVerificationToken": csrfToken ?? ""
+            }
+        });
+
+        // If server redirects to AdminDashboard (we will make server return redirect), fetch returns OK but not redirected.
+        // We expect the server to return { success: true, redirectUrl: '/AdminDashboard' } or return 200 with JSON when using AJAX.
+        // To keep compatibility, try to parse JSON:
+        if (response.ok) {
+            // try parse JSON
+            let json = null;
+            try { json = await response.json(); } catch { }
+
+            const redirectUrl = json?.redirectUrl ?? '/AdminDashboard';
+
+            Swal.fire({
+                icon: "success",
+                title: "Disaster Registered!",
+                text: "The new disaster has been successfully added.",
+                confirmButtonColor: "#5b3df5",
+                timer: 1800,
+                timerProgressBar: true
+            }).then(() => {
+                window.location.href = redirectUrl;
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong while saving. Please try again.",
+                confirmButtonColor: "#d33"
+            });
+        }
+    });
+</script>
+<script>
+    function toggleOtherDisaster() {
+        const select = document.getElementById("typeOfDisasterSelect");
+        const otherInput = document.getElementById("otherDisasterInput");
+        if (select.value === "Other") {
+            otherInput.style.display = "block";
+            otherInput.required = true;
+        } else {
+            otherInput.style.display = "none";
+            otherInput.required = false;
+            otherInput.value = "";
+        }
+    }
+</script>

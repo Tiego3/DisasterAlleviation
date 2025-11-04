@@ -15,18 +15,18 @@ namespace DisasterAlleviation.Data
         }
 
         // Add the IncidentReports DbSet
-        public DbSet<IncidentReport> IncidentReports { get; set; }
+        public DbSet<Disaster> IncidentReports { get; set; }
 
         public DbSet<Donation> Donations { get; set; }
 
         public DbSet<Volunteer> Volunteers { get; set; }
 
-        public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<MonetaryDonation> MonetaryDonations { get; set; }
         public DbSet<GoodsDonation> GoodsDonations { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Donor> Donors { get; set; }
 
+        public DbSet<Disaster> Disasters { get; set; }
 
     }
 }

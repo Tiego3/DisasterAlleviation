@@ -4,6 +4,7 @@ using DisasterAlleviation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DisasterAlleviation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104092345_AddDisasterTable")]
+    partial class AddDisasterTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,16 +65,13 @@ namespace DisasterAlleviation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequiredAidTypes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfDisaster")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -232,9 +232,6 @@ namespace DisasterAlleviation.Migrations
                     b.Property<DateTime>("DateApplied")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DisasterId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -276,8 +273,6 @@ namespace DisasterAlleviation.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DisasterId");
 
                     b.ToTable("Volunteers");
                 });
@@ -514,15 +509,6 @@ namespace DisasterAlleviation.Migrations
                     b.Navigation("Donor");
                 });
 
-            modelBuilder.Entity("DisasterAlleviation.Models.Volunteer", b =>
-                {
-                    b.HasOne("DisasterAlleviation.Models.Disaster", "Disaster")
-                        .WithMany("Volunteers")
-                        .HasForeignKey("DisasterId");
-
-                    b.Navigation("Disaster");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -572,11 +558,6 @@ namespace DisasterAlleviation.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DisasterAlleviation.Models.Disaster", b =>
-                {
-                    b.Navigation("Volunteers");
                 });
 
             modelBuilder.Entity("DisasterAlleviation.Models.Donor", b =>

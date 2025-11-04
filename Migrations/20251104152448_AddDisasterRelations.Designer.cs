@@ -4,6 +4,7 @@ using DisasterAlleviation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DisasterAlleviation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104152448_AddDisasterRelations")]
+    partial class AddDisasterRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,16 +65,13 @@ namespace DisasterAlleviation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequiredAidTypes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfDisaster")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -516,11 +516,9 @@ namespace DisasterAlleviation.Migrations
 
             modelBuilder.Entity("DisasterAlleviation.Models.Volunteer", b =>
                 {
-                    b.HasOne("DisasterAlleviation.Models.Disaster", "Disaster")
+                    b.HasOne("DisasterAlleviation.Models.Disaster", null)
                         .WithMany("Volunteers")
                         .HasForeignKey("DisasterId");
-
-                    b.Navigation("Disaster");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

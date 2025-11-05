@@ -225,6 +225,39 @@ a {
     font-weight: 600;
 }
 
+.disaster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.disaster-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .disaster-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    }
+
+#toggleDisastersBtn {
+    border-radius: 50px;
+    padding: 0.6rem 1.4rem;
+    transition: background-color 0.2s ease;
+}
+
+    #toggleDisastersBtn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+
 /* =======================================
    FOOTER
 ======================================= */

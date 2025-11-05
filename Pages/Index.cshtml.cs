@@ -1,10 +1,9 @@
 using DisasterAlleviation.Data;
-using Microsoft.AspNetCore.Identity; 
-using Microsoft.AspNetCore.Mvc;
+using DisasterAlleviation.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DisasterAlleviation.Pages
@@ -18,14 +17,17 @@ namespace DisasterAlleviation.Pages
             _context = context;
         }
 
-        // Properties to hold the aggregated data for the dashboard
+        // Dashboard summary data
         public decimal TotalMoneyDonations { get; set; }
         public int TotalGoodsReceived { get; set; }
         public int TotalDonors { get; set; }
-        
+
+        // Active disasters list
+        public List<Disaster> ActiveDisasters { get; set; } = new();
 
         public async Task OnGetAsync()
         {
+            // Donation summaries
             TotalMoneyDonations = await _context.MonetaryDonations
                 .Select(d => (decimal?)d.Amount)
                 .SumAsync() ?? 0m;
@@ -34,13 +36,13 @@ namespace DisasterAlleviation.Pages
                 .Select(d => (int?)d.ItemsCount)
                 .SumAsync() ?? 0;
 
-            TotalDonors = await _context.MonetaryDonations
-                .Where(d => !string.IsNullOrEmpty(d.DonorName))
-                .Select(d => d.DonorName!)
-                .Distinct()
-                .CountAsync();
-
             TotalDonors = await _context.Donors.CountAsync();
+
+            // Load active disasters
+            ActiveDisasters = await _context.Disasters
+                .Where(d => d.Status == "Active")
+                .OrderByDescending(d => d.StartDate)
+                .ToListAsync();
         }
     }
 }

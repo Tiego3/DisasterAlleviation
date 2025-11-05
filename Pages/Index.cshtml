@@ -51,6 +51,7 @@
 </section>
 
 <!-- Current Disasters -->
+<!-- Current Disasters -->
 <section class="current-disasters">
     <div class="container text-center">
         <h2 class="section-title">Current Disaster Response</h2>
@@ -58,14 +59,92 @@
             See how resources are being allocated to help communities in crisis right now.
         </p>
 
-        <div class="no-disasters">
-            <div class="no-icon">⚠️</div>
-            <p class="no-text">No active disasters at this time.</p>
-        </div>
+        @if (Model.ActiveDisasters.Any())
+        {
+            <div id="disasterGrid" class="disaster-grid">
+                @foreach (var disaster in Model.ActiveDisasters)
+                {
+                    <div class="disaster-card">
+                        <h3 class="disaster-title">@disaster.TypeOfDisaster</h3>
 
-        <a href="/Disasters" class="btn btn-primary mt-4">View All Disasters</a>
+                        <div class="disaster-meta">
+                            <p><i class="bi bi-geo-alt"></i> @disaster.Location</p>
+                            <p><i class="bi bi-calendar-event"></i> @disaster.StartDate.ToString("yyyy-MM-dd")</p>
+                        </div>
+
+                        <p class="disaster-desc">@disaster.Description</p>
+
+                        @if (!string.IsNullOrEmpty(disaster.RequiredAidTypes))
+                        {
+                            <div class="aid-tags">
+                                @foreach (var aid in disaster.RequiredAidTypes.Split(','))
+                                {
+                                    <span class="aid-tag">@aid.Trim()</span>
+                                }
+                            </div>
+                        }
+
+                        <div class="allocation-summary">
+                            <p><strong>Status:</strong> @disaster.Status</p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <button id="toggleDisastersBtn" class="btn btn-outline-primary mt-4">View All Disasters</button>
+        }
+        else
+        {
+            <div class="no-disasters">
+                <div class="no-icon">⚠️</div>
+                <p class="no-text">No active disasters at this time.</p>
+            </div>
+        }
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const grid = document.getElementById("disasterGrid");
+        const cards = Array.from(grid.children);
+        const toggleBtn = document.getElementById("toggleDisastersBtn");
+        const maxVisible = 3;
+
+        // Initially show only top 3
+        cards.forEach((card, index) => {
+            if (index >= maxVisible) card.style.display = "none";
+        });
+
+        let expanded = false;
+
+        toggleBtn?.addEventListener("click", () => {
+            expanded = !expanded;
+            cards.forEach((card, index) => {
+                card.style.display = expanded || index < maxVisible ? "block" : "none";
+            });
+
+            toggleBtn.textContent = expanded ? "Show Less" : "View All Disasters";
+        });
+    });
+</script>
+
+@section Scripts {
+    <script>
+        function toggleMoreDisasters() {
+            const moreSection = document.getElementById('moreDisasters');
+            const btn = document.getElementById('toggleViewBtn');
+            if (moreSection.style.display === 'none') {
+                moreSection.style.display = 'grid';
+                btn.textContent = 'Show Less';
+                btn.classList.add('btn-secondary');
+            } else {
+                moreSection.style.display = 'none';
+                btn.textContent = 'View All Disasters';
+                btn.classList.remove('btn-secondary');
+            }
+        }
+    </script>
+}
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -1,10 +1,16 @@
 ﻿@page
 @model DisasterAlleviation.Pages.VolunteerModel
 @{
-    ViewData["Title"] = "Become a Volunteer";
+    ViewData["Title"] = "Volunteer";
 }
 
-<section class="container py-5">
+@if (TempData["VolunteerSuccess"] != null)
+{
+    <meta name="notification-type" content="volunteer" />
+    <meta name="notification-message" content="@TempData["VolunteerSuccess"]" />
+}
+
+<section class="container-xl py-5">
     <div class="text-center mb-4">
         <h1 class="fw-bold text-primary">Become a Volunteer</h1>
         <p class="lead text-muted">

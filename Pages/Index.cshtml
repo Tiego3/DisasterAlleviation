@@ -4,10 +4,22 @@
     ViewData["Title"] = "Home";
 }
 
+@if (TempData["AnonId"] != null)
+{
+    <meta name="notification-type" content="donate" />
+    <meta name="notification-message" content="@TempData["AnonId"]" />
+}
+
+@if (TempData["VolunteerSuccess"] != null)
+{
+    <meta name="notification-type" content="volunteer" />
+    <meta name="notification-message" content="@TempData["VolunteerSuccess"]" />
+}
+
 <!-- Hero Section -->
 <section class="hero">
     <div class="hero-overlay">
-        <div class="container text-center">
+        <div class="container-xl text-center">
             <h1 class="hero-title">
                 Bringing Hope in <span class="highlight">Times of Crisis</span>
             </h1>
@@ -15,17 +27,19 @@
                 The Disaster Alleviation Foundation provides practical aid during disasters, ensuring
                 transparency and swift action when communities need it most.
             </p>
-            <a href="/Donate" class="btn btn-primary btn-lg">Donate Now</a>
+            <a href="/Donate" class="btn btn-primary btn-lg">
+                <i class="bi bi-heart"></i> Donate Now
+            </a>
         </div>
     </div>
 </section>
 
 <!-- Impact Section -->
 <section class="impact-section">
-    <div class="container text-center">
+    <div class="container-xl text-center">
         <h2 class="section-title">Our Impact by the Numbers</h2>
         <p class="section-sub">
-            Transparency is at the core of our mission. Here’s how your donations are making a real difference.
+            Transparency is at the core of our mission. Here's how your donations are making a real difference.
         </p>
 
         <div class="impact-grid">
@@ -51,9 +65,8 @@
 </section>
 
 <!-- Current Disasters -->
-<!-- Current Disasters -->
 <section class="current-disasters">
-    <div class="container text-center">
+    <div class="container-xl text-center">
         <h2 class="section-title">Current Disaster Response</h2>
         <p class="section-sub">
             See how resources are being allocated to help communities in crisis right now.
@@ -102,80 +115,3 @@
         }
     </div>
 </section>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const grid = document.getElementById("disasterGrid");
-        const cards = Array.from(grid.children);
-        const toggleBtn = document.getElementById("toggleDisastersBtn");
-        const maxVisible = 3;
-
-        // Initially show only top 3
-        cards.forEach((card, index) => {
-            if (index >= maxVisible) card.style.display = "none";
-        });
-
-        let expanded = false;
-
-        toggleBtn?.addEventListener("click", () => {
-            expanded = !expanded;
-            cards.forEach((card, index) => {
-                card.style.display = expanded || index < maxVisible ? "block" : "none";
-            });
-
-            toggleBtn.textContent = expanded ? "Show Less" : "View All Disasters";
-        });
-    });
-</script>
-
-@section Scripts {
-    <script>
-        function toggleMoreDisasters() {
-            const moreSection = document.getElementById('moreDisasters');
-            const btn = document.getElementById('toggleViewBtn');
-            if (moreSection.style.display === 'none') {
-                moreSection.style.display = 'grid';
-                btn.textContent = 'Show Less';
-                btn.classList.add('btn-secondary');
-            } else {
-                moreSection.style.display = 'none';
-                btn.textContent = 'View All Disasters';
-                btn.classList.remove('btn-secondary');
-            }
-        }
-    </script>
-}
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if (TempData["AnonId"] != null)
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                title: "Thank You for Your Donation!",
-                html: `
-                    <p>Your <strong>Anonymous Donor ID</strong> is:</p>
-                    <h3 style="color:#3085d6; font-weight:bold;">@TempData["AnonId"]</h3>
-                    <p>Please save this ID to use for future donations.</p>
-                `,
-                icon: "success",
-                confirmButtonText: "Got it",
-                confirmButtonColor: "#3085d6",
-                allowOutsideClick: false
-            });
-        });
-    </script>
-}
-@if (TempData["VolunteerSuccess"] != null)
-{
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Application Submitted!',
-            text: '@TempData["VolunteerSuccess"]',
-            confirmButtonColor: '#6c63ff'
-        });
-    </script>
-}
-

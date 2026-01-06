@@ -8,14 +8,21 @@
     <h2 class="text-center mb-4">Make a Difference Today</h2>
     <p class="text-center text-muted mb-5">Your generosity helps provide immediate relief to communities in need.</p>
 
-    @if (!string.IsNullOrEmpty(TempData["AnonId"] as string))
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Thank you for your donation!</strong> Your Anonymous ID is: <strong>@TempData["AnonId"]</strong>
-            <br />Please save this ID if you wish to donate anonymously again in the future.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showToast(
+                    "Thank You for Your Donation!",
+                    `Your <strong>Anonymous Donor ID</strong> is: <br><strong>@TempData["AnonId"]</strong><br>Please save this ID for future donations.`,
+                    "success",
+                    false, // manual close
+                    "/" // redirect after close
+                );
+            });
+        </script>
     }
+
 
     <!-- Tabs -->
     <ul class="nav nav-tabs justify-content-center mb-4" id="donationTabs" role="tablist">

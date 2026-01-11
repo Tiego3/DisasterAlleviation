@@ -17,7 +17,7 @@
     <div class="row text-center g-4">
         <div class="col-md-3">
             <div class="summary-card bg-success-subtle shadow-sm p-4 rounded-4">
-                <h3 class="fw-bold text-success">${@Model.TotalMonetary}</h3>
+                <h3 class="fw-bold text-success"><span>R </span>@Model.TotalMonetary</h3>
                 <p class="mb-0 text-muted">Pending Allocation</p>
             </div>
         </div>
@@ -53,7 +53,9 @@
             <!-- Capture Monetary Donation -->
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-success fs-2">💵</div>
+                    <div class="mb-3">
+                        <i class="bi bi-cash-stack fs-2 text-success"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Capture Monetary Donation</h5>
                     <p class="text-muted small">Record new monetary donations from donors</p>
                     <a asp-page="/Donate" asp-route-tab="monetary" class="btn btn-gradient w-100">+ Get Started</a>
@@ -63,7 +65,9 @@
             <!-- Capture Goods Donation -->
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-warning fs-2">🎁</div>
+                    <div class="mb-3">
+                        <i class="bi bi-box-seam fs-2 text-warning"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Capture Goods Donation</h5>
                     <p class="text-muted small">Record new goods donations from donors</p>
                     <a asp-page="/Donate" asp-route-tab="goods" class="btn btn-gradient w-100">+ Get Started</a>
@@ -72,7 +76,9 @@
 
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-danger fs-2">⚠️</div>
+                    <div class="mb-3">
+                        <i class="bi bi-exclamation-triangle-fill fs-2 text-danger"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Register New Disaster</h5>
                     <p class="text-muted small">Create entry for new disaster requiring aid</p>
                     <a asp-page="/RegisterDisaster" class="btn btn-gradient w-100">+ Get Started</a>
@@ -82,7 +88,9 @@
             <!-- Row 2 -->
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-secondary fs-2">⚙️</div>
+                    <div class="mb-3">
+                        <i class="bi bi-gear-fill fs-2 text-secondary"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Manage Categories</h5>
                     <p class="text-muted small">Define new categories for goods donations</p>
                     <a asp-page="/Categories/Index" class="btn btn-gradient w-100">+ Get Started</a>
@@ -91,7 +99,9 @@
 
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-primary fs-2">📊</div>
+                    <div class="mb-3">
+                        <i class="bi bi-receipt-cutoff fs-2 text-primary"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">View All Donations</h5>
                     <p class="text-muted small">Browse all monetary and goods donations</p>
                     <a asp-page="/AdminViewDonations" class="btn btn-gradient w-100">+ Get Started</a>
@@ -101,7 +111,9 @@
 
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-warning fs-2">📋</div>
+                    <div class="mb-3">
+                        <i class="bi bi-clipboard-check fs-2 text-warning"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Allocate Resources</h5>
                     <p class="text-muted small">Assign money and goods to active disasters</p>
                     <a asp-page="/Resources/Allocate" class="btn btn-gradient w-100">+ Get Started</a>
@@ -111,16 +123,20 @@
             <!-- Row 3 -->
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-danger fs-2">🌪️</div>
+                    <div class="mb-3">
+                        <i class="bi bi-exclamation-diamond-fill fs-2 text-danger"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">View All Disasters</h5>
                     <p class="text-muted small">Monitor active and past disaster responses</p>
                     <a asp-page="/AdminViewDisasters" class="btn btn-gradient w-100">+ Get Started</a>
-</div>
+                </div>
             </div>
 
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-info fs-2">🙋</div>
+                    <div class="mb-3">
+                        <i class="bi bi-people-fill fs-2 text-info"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">View All Volunteers</h5>
                     <p class="text-muted small">Manage volunteer applications and approvals</p>
                     <a asp-page="/AdminVolunteerManagement" class="btn btn-gradient w-100">+ Get Started</a>
@@ -129,7 +145,9 @@
 
             <div class="col-md-4">
                 <div class="function-card p-4 shadow-sm rounded-4 h-100 text-center">
-                    <div class="icon mb-3 text-success fs-2">🚚</div>
+                    <div class="mb-3">
+                        <i class="bi bi-truck fs-2 text-success"></i>
+                    </div>
                     <h5 class="fw-bold mb-2">Manage Goods Drop-offs</h5>
                     <p class="text-muted small">View and confirm scheduled goods donations</p>
                     <a asp-page="/GoodsDropoffs/Index" class="btn btn-gradient w-100">+ Get Started</a>
@@ -148,7 +166,7 @@
 
         /* Buttons */
         .btn-gradient {
-            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+            background: #4f12de;
             color: #fff;
             font-weight: 600;
             border: none;

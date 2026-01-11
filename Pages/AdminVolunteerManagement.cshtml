@@ -4,9 +4,13 @@
     ViewData["Title"] = "Volunteer Management";
 }
 
-<!-- ✅ Page Header -->
+<!-- Page Header -->
 <section class="container mt-4">
-    <a asp-page="/AdminDashboard" class="btn btn-link mb-3">← Back to Admin Dashboard</a>
+    <a asp-page="/AdminDashboard"
+        class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn mb-3">
+        <i class="bi bi-arrow-left-circle me-1"></i> Back
+    </a>
+
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -53,7 +57,7 @@
     </div>
 
     <!-- Volunteer Table -->
-    <div class="card shadow-sm">
+    <div class="shadow-sm rounded-4 bg-white">
         <div class="card-body">
             <h5 class="fw-bold mb-3">Volunteer Applications (@Model.Volunteers.Count)</h5>
 
@@ -93,7 +97,7 @@
     </div>
 </section>
 
-<!-- ✅ Volunteer Details Modal -->
+<!-- Volunteer Details Modal -->
 <div class="modal fade" id="volunteerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4" style="backdrop-filter: blur(8px);">

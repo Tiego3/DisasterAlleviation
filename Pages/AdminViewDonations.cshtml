@@ -6,7 +6,12 @@
 
 <div class="container py-5">
     <div class="d-flex align-items-center mb-4">
-        <a asp-page="/AdminDashboard" class="btn btn-link text-decoration-none me-3">⬅ Back</a>
+        <div>
+            <a asp-page="/AdminDashboard"
+                class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back
+            </a>
+        </div>
         <div>
             <h2 class="fw-bold mb-0">View All Donations</h2>
             <p class="text-muted mb-0">Browse and filter all monetary and goods donations</p>
@@ -58,12 +63,12 @@
     <ul class="nav nav-tabs mb-4" id="donationTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="monetary-tab" data-bs-toggle="tab" data-bs-target="#monetary" type="button" role="tab">
-                💰 Monetary (@Model.MonetaryDonations.Count)
+                 Monetary (@Model.MonetaryDonations.Count)
             </button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="goods-tab" data-bs-toggle="tab" data-bs-target="#goods" type="button" role="tab">
-                🎁 Goods (@Model.GoodsDonations.Count)
+                 Goods (@Model.GoodsDonations.Count)
             </button>
         </li>
     </ul>
@@ -121,7 +126,7 @@
                                 <td>@donation.Category?.Name</td>
                                 <td>@donation.ItemsCount</td>
                                 <td>@donation.Description</td>
-                                <td>@DateTime.Now.ToString("dd/MM/yy")</td> <!-- replace with donation.DateDonated -->
+                                <td>@DateTime.Now.ToString("dd/MM/yy")</td> 
                             </tr>
                         }
                     </tbody>
@@ -138,7 +143,7 @@
 @section Styles {
     <style>
         .btn-primary {
-            background: linear-gradient(90deg, #5b3df5, #8c49ff);
+            background: #4f12de;
             border: none;
         }
 

@@ -16,7 +16,7 @@
                             <i class="bi bi-arrow-left-circle me-1"></i> Back </a>
                     </div>
 
-                    <h2 class="fw-bold text-center text-primary mb-4">
+                    <h2 class="fw-bold text-center mb-4">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
                         Register New Disaster
                     </h2>
@@ -28,7 +28,7 @@
                     <form method="post" id="registerDisasterForm" novalidate>
                         <!-- Type of Disaster dropdown -->
                         <div class="form-group mb-3">
-                            <label asp-for="Input.TypeOfDisaster" class="form-label fw-semibold">Type of Disaster</label>
+                            <label asp-for="Input.TypeOfDisaster" class="form-label fw-semibold">Type of Disaster *</label>
                             <select asp-for="Input.TypeOfDisaster" class="form-control form-control-lg" id="typeOfDisasterSelect" required onchange="toggleOtherDisaster()">
                                 <option value="">Select disaster type</option>
                                 <option>Flood</option>
@@ -50,20 +50,20 @@
 
 
                         <div class="form-group mb-3">
-                            <label asp-for="Input.Location" class="form-label fw-semibold">Location</label>
+                            <label asp-for="Input.Location" class="form-label fw-semibold">Location *</label>
                             <input asp-for="Input.Location" class="form-control form-control-lg" placeholder="Enter disaster location" />
                             <span asp-validation-for="Input.Location" class="text-danger small"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Input.Description" class="form-label fw-semibold">Description</label>
+                            <label asp-for="Input.Description" class="form-label fw-semibold">Description *</label>
                             <textarea asp-for="Input.Description" rows="3" class="form-control form-control-lg" placeholder="Describe the disaster..."></textarea>
                             <span asp-validation-for="Input.Description" class="text-danger small"></span>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label asp-for="Input.StartDate" class="form-label fw-semibold">Start Date</label>
+                                <label asp-for="Input.StartDate" class="form-label fw-semibold">Start Date *</label>
                                 <input asp-for="Input.StartDate" type="date" class="form-control form-control-lg" />
                                 <span asp-validation-for="Input.StartDate" class="text-danger small"></span>
                             </div>
@@ -108,6 +108,9 @@
 
 @section Styles {
     <style>
+        h2{
+            color: #1f2937;
+        }
         .register-disaster {
             background: linear-gradient(180deg, #f9f9ff 0%, #ffffff 100%);
         }

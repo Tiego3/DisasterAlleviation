@@ -5,25 +5,26 @@
 }
 
 <section class="container py-5">
-    <div class="d-flex justify-content-between align-items-start mb-3">
+    <div class="d-flex align-items-center mb-4">
         <!-- Back (left) -->
         <div>
-            <a asp-page="/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
+            <a asp-page="/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
                 <i class="bi bi-arrow-left-circle me-1"></i> Back </a>
         </div>
 
         <!-- Title -->
-        <div class="text-center">
-            <h2 class="fw-bold text-primary mb-0">Disaster Management</h2>
+        <div class="justify-left">
+            <h2 class="fw-bold mb-0">Disaster Management</h2>
             <p class="text-muted small mb-0">Manage registered disasters, allocate resources and assign volunteers.</p>
         </div>
 
-        <!-- Top-right actions -->
-        <div class="d-flex gap-2">
-            <a asp-page="/AllocateResources" class="btn btn-outline-primary">Allocate Resources</a>
-            <a asp-page="/AllocateVolunteers" class="btn btn-outline-success">Allocate Volunteers</a>
-            <a asp-page="/RegisterDisaster" class="btn btn-outline-info">Register New Disaster</a>
-        </div>
+        
+    </div>
+    <!-- Top-right actions -->
+    <div class="d-flex gap-2 mb-4">
+        <a asp-page="/AllocateResources" class="btn btn-outline-primary">Allocate Resources</a>
+        <a asp-page="/AllocateVolunteers" class="btn btn-outline-success">Allocate Volunteers</a>
+        <a asp-page="/RegisterDisaster" class="btn btn-outline-info">Register New Disaster</a>
     </div>
 
     <!-- Filters / search -->
@@ -67,7 +68,7 @@
     </div>
 
     <!-- Table -->
-    <div class="card shadow-sm">
+    <div class="shadow-sm rounded-4 bg-white">
         <div class="card-body">
             <div class="table-responsive">
                 <table id="disastersTable" class="table table-hover align-middle">

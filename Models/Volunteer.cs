@@ -27,7 +27,7 @@ namespace DisasterAlleviation.Models
         public bool WillingToTravel { get; set; }
         public string? AdditionalInfo { get; set; }
 
-        // ✅ Admin-only / system fields
+        // Admin-only / system fields
         [Required]
         public string Status { get; set; } = "Pending";
 

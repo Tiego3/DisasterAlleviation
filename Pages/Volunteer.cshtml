@@ -11,26 +11,35 @@
 }
 
 <section class="container-xl py-5">
+    @if (User.IsInRole("Admin") || (Request.Headers["Referer"].ToString().Contains("/Admin")))
+    {
+        <div class="mb-3">
+            <a asp-page="/AdminDashboard"
+               class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back to Admin
+            </a>
+        </div>
+    }
     <div class="text-center mb-4">
-        <h1 class="fw-bold text-primary">Become a Volunteer</h1>
-        <p class="lead text-muted">
+        <h2 class="text-center mb-4">Become a Volunteer</h2>
+        <p class="text-center text-muted mb-5">
             Join our team of dedicated volunteers and make a difference in disaster relief efforts.
             Your time and skills can save lives and rebuild communities.
         </p>
     </div>
 
     <form method="post" class="shadow p-4 rounded bg-white">
-        <h4 class="mb-3 text-primary"><i class="bi bi-person-heart"></i> Volunteer Application</h4>
+        <h4 class="mb-3"><i class="bi bi-person-heart"></i> Volunteer Application</h4>
 
         <!-- Personal Information -->
         <div class="row mb-3">
             <div class="col-md-6">
-                <label asp-for="Input.FullName" class="form-label fw-semibold"></label>
+                <label asp-for="Input.FullName" class="form-label fw-semibold"> Full Name <span>*</span></label>
                 <input asp-for="Input.FullName" class="form-control" placeholder="Enter your full name" />
                 <span asp-validation-for="Input.FullName" class="text-danger"></span>
             </div>
             <div class="col-md-6">
-                <label asp-for="Input.Email" class="form-label fw-semibold"></label>
+                <label asp-for="Input.Email" class="form-label fw-semibold"> Email <span>*</span></label>
                 <input asp-for="Input.Email" class="form-control" placeholder="your.email@example.com" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
@@ -38,12 +47,12 @@
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label asp-for="Input.PhoneNumber" class="form-label fw-semibold"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="+1 (555) 123-4567" />
+                <label asp-for="Input.PhoneNumber" class="form-label fw-semibold"> Phone Number <span>*</span></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="+27 123-4567" />
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="col-md-6">
-                <label asp-for="Input.Location" class="form-label fw-semibold"></label>
+                <label asp-for="Input.Location" class="form-label fw-semibold">Location <span>*</span></label>
                 <input asp-for="Input.Location" class="form-control" placeholder="Enter your city" />
                 <span asp-validation-for="Input.Location" class="text-danger"></span>
             </div>
@@ -51,7 +60,7 @@
 
         <!-- Availability & Skills -->
         <div class="mb-3">
-            <label asp-for="Input.Availability" class="form-label fw-semibold"></label>
+            <label asp-for="Input.Availability" class="form-label fw-semibold">Availability <span>*</span></label>
             <select asp-for="Input.Availability" class="form-select">
                 <option value="">Select your availability</option>
                 <option>Morning (6AM - 12PM)</option>
@@ -77,13 +86,13 @@
 
         <!-- Available Dates -->
         <div class="mb-3">
-            <label asp-for="Input.AvailableDates" class="form-label fw-semibold"></label>
+            <label asp-for="Input.AvailableDates" class="form-label fw-semibold">Available Dates <span>*</span></label>
             <input asp-for="Input.AvailableDates" type="date" class="form-control" />
         </div>
 
         <!-- Additional Info -->
         <div class="mb-3">
-            <label asp-for="Input.EmergencyContact" class="form-label fw-semibold"></label>
+            <label asp-for="Input.EmergencyContact" class="form-label fw-semibold">Emergency Contact <span>*</span></label>
             <input asp-for="Input.EmergencyContact" class="form-control" placeholder="Name and phone number" />
             <span asp-validation-for="Input.EmergencyContact" class="text-danger"></span>
         </div>

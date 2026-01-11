@@ -83,9 +83,9 @@ namespace DisasterAlleviation.Pages
                 WillingToTravel = Input.WillingToTravel,
                 AdditionalInfo = Input.AdditionalInfo,
 
-                // ✅ Set backend-only fields safely
+                // Set backend-only fields safely
                 Status = "Pending", // default when submitted
-                CanTravel = Input.WillingToTravel, // optional: mirror their willingness
+                CanTravel = Input.WillingToTravel, 
                 DateApplied = DateTime.UtcNow
             };
 

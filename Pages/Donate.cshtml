@@ -22,6 +22,16 @@
             });
         </script>
     }
+    @if (User.IsInRole("Admin") || (Request.Headers["Referer"].ToString().Contains("/Admin")))
+    {
+        <div class="mb-3">
+            <a asp-page="/AdminDashboard"
+               class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back to Admin
+            </a>
+        </div>
+    }
+
 
 
     <!-- Tabs -->
@@ -49,7 +59,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card p-4 shadow-sm">
-                        <h4 class="mb-3 text-primary">Monetary Donation</h4>
+                        <h4 class="mb-3">Monetary Donation</h4>
                         <form method="post" asp-page-handler="MonetaryDonation" id="monetaryForm">
                             <div class="form-check mb-3">
                                 <input asp-for="MonetaryForm.IsAnonymous" class="form-check-input" type="checkbox" id="monetaryAnonymous" />
@@ -91,7 +101,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card p-4 shadow-sm">
-                        <h4 class="mb-3 text-primary">Goods Donation</h4>
+                        <h4 class="mb-3">Goods Donation</h4>
                         <form method="post" asp-page-handler="GoodsDonation" id="goodsForm">
                             <div class="form-check mb-3">
                                 <input asp-for="GoodsForm.IsAnonymous" class="form-check-input" type="checkbox" id="goodsAnonymous" />

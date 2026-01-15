@@ -28,5 +28,19 @@ namespace DisasterAlleviation.Models
 
         [DataType(DataType.DateTime)]
         public DateTime DateDonated { get; set; } = DateTime.Now;
+
+        [DataType(DataType.DateTime)]
+        public DateTime? DropoffDateTime { get; set; }
+
+        [MaxLength(20)]
+        public string? ReferenceNumber { get; set; }
+
+        [MaxLength(50)]
+        public string DropoffStatus { get; set; } = "Pending"; // Pending, Scheduled, Completed, Cancelled
+
+        public DateTime? CompletedAt { get; set; }
+
+        [MaxLength(500)]
+        public string? AdminNotes { get; set; }
     }
 }

@@ -44,7 +44,7 @@ a {
 }
 
 .navbar {
-    padding: 0.75rem 0;
+    
     justify-content: space-between;
 }
 
@@ -85,35 +85,54 @@ a {
     padding-right: 1rem;
 }
 
-    .navbar-nav .nav-link,
-    .sign-in-link {
-        color: #374151 !important;
-        font-weight: 500;
-        padding: 8px 14px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-    }
+.navbar-nav .nav-link,
+.sign-in-link {
+    color: #374151 !important;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
 
-        .navbar-nav .nav-link i,
-        .sign-in-link i {
-            font-size: 1rem;
-        }
+.navbar-nav .nav-link i,
+.sign-in-link i {
+    font-size: 1rem;
+}
 
-        /* Hover */
-        .navbar-nav .nav-link:hover,
-        .sign-in-link:hover {
-            background-color: #f97015;
-            color: #fff !important;
-        }
+/* Hover */
+.navbar-nav .nav-link:hover,
+.sign-in-link:hover {
+    background-color: #f97015;
+    color: #fff !important;
+}
 
-        /* Active state */
-        .navbar-nav .nav-link.active {
-            background-color: #4f12de;
-            color: #fff !important;
-        }
+/* Active state */
+.navbar-nav .nav-link.active {
+    background-color: #4f12de;
+    color: #fff !important;
+}
+
+.navbar-brand {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+
+.navbar-logo {
+    width: 200px;
+    height: 200px;
+    display: block;
+    object-fit: contain;
+}
+
+.navbar-brand img {
+    max-height: 65px;
+    max-width: 65px
+}
+
 
 /* =======================================
    BUTTONS
@@ -444,6 +463,8 @@ a {
         border-color: #4f12de;
         box-shadow: 0 0 0 0.2rem rgba(79, 18, 222, 0.1);
     }
+
+
 
 /* =======================================
    RESPONSIVE

@@ -14,7 +14,7 @@
     @if (User.IsInRole("Admin") || (Request.Headers["Referer"].ToString().Contains("/Admin")))
     {
         <div class="mb-3">
-            <a asp-page="/AdminDashboard"
+            <a asp-page="/Admin/AdminDashboard"
                class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
                 <i class="bi bi-arrow-left-circle me-1"></i> Back to Admin
             </a>

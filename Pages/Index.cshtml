@@ -15,6 +15,13 @@
     <meta name="notification-type" content="volunteer" />
     <meta name="notification-message" content="@TempData["VolunteerSuccess"]" />
 }
+@if (TempData["GoodsDonationSuccess"] != null)
+{
+    <meta name="notification-type" content="goods-donation" />
+    <meta name="notification-reference" content="@TempData["ReferenceNumber"]" />
+    <meta name="notification-method" content="@TempData["DropoffMethod"]" />
+    <meta name="notification-datetime" content="@TempData["DropoffDateTime"]" />
+}
 
 <!-- Hero Section -->
 <section class="hero">

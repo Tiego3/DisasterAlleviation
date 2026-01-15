@@ -9,5 +9,7 @@
         public int CategoryId { get; set; }
         public int ItemsCount { get; set; }
         public string? Description { get; set; }
+        public string DropoffMethod { get; set; } = "Scheduled"; // Scheduled or Immediate
+        public DateTime? DropoffDateTime { get; set; }
     }
 }

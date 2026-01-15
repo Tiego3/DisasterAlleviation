@@ -28,5 +28,7 @@ namespace DisasterAlleviation.Data
 
         public DbSet<Disaster> Disasters { get; set; }
 
+        public DbSet<ResourceAllocation> ResourceAllocations { get; set; }
+
     }
 }

@@ -81,6 +81,40 @@ document.addEventListener("DOMContentLoaded", function () {
             toastEl.addEventListener('hidden.bs.toast', function () {
                 window.location.href = "/Index";
             });
+        } else if (type === "goods-donation") {
+            const reference = document.querySelector('meta[name="notification-reference"]')?.getAttribute('content');
+            const method = document.querySelector('meta[name="notification-method"]')?.getAttribute('content');
+            const datetime = document.querySelector('meta[name="notification-datetime"]')?.getAttribute('content');
+
+            toastTitle.textContent = "Donation Submitted!";
+
+            if (method === "Scheduled") {
+                toastBody.innerHTML = `
+            <p class="mb-2"><strong>Your goods donation has been scheduled.</strong></p>
+            <div class="bg-light p-2 rounded mb-2">
+                <p class="mb-1"><strong>Reference Number:</strong></p>
+                <h5 class="text-primary fw-bold mb-0">${reference}</h5>
+            </div>
+            <p class="mb-1"><strong>Drop-off Time:</strong> ${datetime}</p>
+            <p class="mb-0 small text-muted">Please present this reference number when you arrive.</p>
+        `;
+            } else {
+                toastBody.innerHTML = `
+            <p class="mb-2"><strong>Your donation is ready for drop-off.</strong></p>
+            <div class="bg-light p-2 rounded mb-2">
+                <p class="mb-1"><strong>Reference Number:</strong></p>
+                <h5 class="text-primary fw-bold mb-0">${reference}</h5>
+            </div>
+            <p class="mb-0 small text-muted">Present this number at our facility.</p>
+        `;
+            }
+
+            const toast = new bootstrap.Toast(toastEl, { autohide: false });
+            toast.show();
+
+            toastEl.addEventListener('hidden.bs.toast', function () {
+                window.location.href = "/Index";
+            });
         }
     }
 

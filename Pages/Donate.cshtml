@@ -25,7 +25,7 @@
     @if (User.IsInRole("Admin") || (Request.Headers["Referer"].ToString().Contains("/Admin")))
     {
         <div class="mb-3">
-            <a asp-page="/AdminDashboard"
+            <a asp-page="/Admin/AdminDashboard"
                class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn">
                 <i class="bi bi-arrow-left-circle me-1"></i> Back to Admin
             </a>
@@ -145,6 +145,38 @@
                                 <span asp-validation-for="GoodsForm.Description" class="text-danger"></span>
                             </div>
 
+                            <hr class="my-4">
+
+                            <h5 class="mb-3"><i class="bi bi-calendar-check me-2"></i>Schedule Drop-off</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Drop-off Method *</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="GoodsForm.DropoffMethod" id="scheduleDropoff" value="Scheduled" checked>
+                                    <label class="btn btn-outline-primary" for="scheduleDropoff">Schedule for Later</label>
+
+                                    <input type="radio" class="btn-check" name="GoodsForm.DropoffMethod" id="immediateDropoff" value="Immediate">
+                                    <label class="btn btn-outline-primary" for="immediateDropoff">Drop-off Now</label>
+                                </div>
+                            </div>
+
+                            <div id="scheduledDropoffSection">
+                                <div class="mb-3">
+                                    <label asp-for="GoodsForm.DropoffDateTime" class="form-label">Preferred Drop-off Date & Time *</label>
+                                    <input asp-for="GoodsForm.DropoffDateTime" type="datetime-local" class="form-control" id="dropoffDateTime" />
+                                    <span asp-validation-for="GoodsForm.DropoffDateTime" class="text-danger"></span>
+                                    <small class="text-muted">Our facility is open Mon-Fri 8AM-5PM, Sat 9AM-1PM</small>
+                                </div>
+                            </div>
+
+                            <div id="immediateDropoffSection" style="display:none;">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Immediate Drop-off:</strong> You can bring your donation to our facility now.
+                                    A reference number will be generated for you to present upon arrival.
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary w-100">Submit Goods Donation</button>
                         </form>
                     </div>
@@ -196,5 +228,38 @@
             }
 
         })();
+
+                // Drop-off method toggle
+        const scheduleRadio = document.getElementById('scheduleDropoff');
+        const immediateRadio = document.getElementById('immediateDropoff');
+        const scheduledSection = document.getElementById('scheduledDropoffSection');
+        const immediateSection = document.getElementById('immediateDropoffSection');
+        const dropoffDateTimeInput = document.getElementById('dropoffDateTime');
+
+        function toggleDropoffSections() {
+            if (scheduleRadio && scheduleRadio.checked) {
+                scheduledSection.style.display = 'block';
+                immediateSection.style.display = 'none';
+                dropoffDateTimeInput.required = true;
+            } else {
+                scheduledSection.style.display = 'none';
+                immediateSection.style.display = 'block';
+                dropoffDateTimeInput.required = false;
+                dropoffDateTimeInput.value = '';
+            }
+        }
+
+        if (scheduleRadio && immediateRadio) {
+            scheduleRadio.addEventListener('change', toggleDropoffSections);
+            immediateRadio.addEventListener('change', toggleDropoffSections);
+            toggleDropoffSections();
+        }
+
+        // Set minimum datetime to current time
+        if (dropoffDateTimeInput) {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            dropoffDateTimeInput.min = now.toISOString().slice(0, 16);
+        }
     </script>
 }

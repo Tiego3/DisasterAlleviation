@@ -1,0 +1,190 @@
+﻿@page
+@model DisasterAlleviation.Pages.Admin.AdminAllocateResourcesModel
+@{
+    ViewData["Title"] = "Allocate Resources";
+}
+
+
+<section class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <div>
+            <a asp-page="/Admin/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back
+            </a>
+        </div>
+        <div>
+            <h2 class="fw-bold mb-0">Allocate Resources</h2>
+            <p class="text-muted small mb-0">Assign monetary funds and goods to active disasters</p>
+        </div>
+    </div>
+
+    @if (!Model.ActiveDisasters.Any())
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            No active disasters available for resource allocation.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm p-4 mb-4">
+                    <h4 class="mb-3"><i class="bi bi-clipboard-check me-2"></i>Allocation Form</h4>
+                    
+                    <form method="post" id="allocationForm">
+                        <div class="mb-3">
+                            <label asp-for="Input.DisasterId" class="form-label fw-semibold">Select Disaster *</label>
+                            <select asp-for="Input.DisasterId" class="form-select" required>
+                                <option value="">-- Select a disaster --</option>
+                                @foreach (var d in Model.ActiveDisasters)
+                                {
+                                    <option value="@d.Id">@d.TypeOfDisaster - @d.Location (@d.StartDate.ToString("yyyy-MM-dd"))</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Input.DisasterId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Resource Type *</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="Input.ResourceType" id="typeMonetary" value="Monetary" checked>
+                                <label class="btn btn-outline-primary" for="typeMonetary">Monetary</label>
+                                
+                                <input type="radio" class="btn-check" name="Input.ResourceType" id="typeGoods" value="Goods">
+                                <label class="btn btn-outline-primary" for="typeGoods">Goods</label>
+                            </div>
+                        </div>
+
+                        <div id="monetarySection">
+                            <div class="mb-3">
+                                <label asp-for="Input.MonetaryAmount" class="form-label fw-semibold">Amount (R) *</label>
+                                <input asp-for="Input.MonetaryAmount" type="number" class="form-control" min="1" step="0.01" placeholder="Enter amount">
+                                <span asp-validation-for="Input.MonetaryAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div id="goodsSection" style="display:none;">
+                            <div class="mb-3">
+                                <label asp-for="Input.GoodsName" class="form-label fw-semibold">Item Name *</label>
+                                <input asp-for="Input.GoodsName" class="form-control" placeholder="e.g., Water bottles, Blankets">
+                                <span asp-validation-for="Input.GoodsName" class="text-danger"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Input.GoodsQuantity" class="form-label fw-semibold">Quantity *</label>
+                                    <input asp-for="Input.GoodsQuantity" type="number" class="form-control" min="1" placeholder="Enter quantity">
+                                    <span asp-validation-for="Input.GoodsQuantity" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Input.GoodsUnit" class="form-label fw-semibold">Unit</label>
+                                    <input asp-for="Input.GoodsUnit" class="form-control" placeholder="e.g., boxes, liters">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Notes" class="form-label fw-semibold">Notes</label>
+                            <textarea asp-for="Input.Notes" class="form-control" rows="2" placeholder="Optional allocation notes"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-gradient w-100 py-2 fw-semibold">
+                            <i class="bi bi-check-circle me-2"></i>Allocate Resources
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm p-4">
+                    <h5 class="fw-bold mb-3">Available Resources</h5>
+                    <div class="mb-3">
+                        <h6 class="text-success">Monetary Funds</h6>
+                        <h4 class="text-success">R @Model.AvailableMonetary.ToString("N2")</h4>
+                        <small class="text-muted">Unallocated donations</small>
+                    </div>
+                    <hr>
+                    <div>
+                        <h6 class="text-primary">Goods Items</h6>
+                        <h4 class="text-primary">@Model.AvailableGoods</h4>
+                        <small class="text-muted">Available for allocation</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const monetaryRadio = document.getElementById('typeMonetary');
+        const goodsRadio = document.getElementById('typeGoods');
+        const monetarySection = document.getElementById('monetarySection');
+        const goodsSection = document.getElementById('goodsSection');
+
+        function toggleSections() {
+            if (monetaryRadio.checked) {
+                monetarySection.style.display = 'block';
+                goodsSection.style.display = 'none';
+            } else {
+                monetarySection.style.display = 'none';
+                goodsSection.style.display = 'block';
+            }
+        }
+
+        monetaryRadio.addEventListener('change', toggleSections);
+        goodsRadio.addEventListener('change', toggleSections);
+
+        document.getElementById('allocationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            try {
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'RequestVerificationToken': csrfToken ?? '' }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Resources Allocated!',
+                        text: 'The resources have been successfully assigned to the disaster.',
+                        confirmButtonColor: '#4f12de',
+                        timer: 2000
+                    });
+                    window.location.href = result.redirectUrl || '/AdminDashboard';
+                } else {
+                    throw new Error('Allocation failed');
+                }
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to allocate resources. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .btn-gradient {
+            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+    </style>
+}

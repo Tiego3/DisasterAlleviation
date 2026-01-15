@@ -22,8 +22,13 @@
     <!-- NAVIGATION BAR -->
     <header class="main-header">
         <nav class="navbar navbar-expand-lg navbar-light container-xl">
-            <a class="navbar-brand" asp-page="/Index">
-                <img src="~/images/logo.png" alt="Logo" class="brand-logo" />
+            <a class="navbar-brand p-0 m-0" asp-page="/Index">
+                <img src="~/images/logo.png"
+                     alt="Logo"
+                     class="navbar-logo"
+                     width="200"
+                     height="200" />
+
                 <div class="brand-text">
                     <div class="brand-name">Disaster Alleviation Foundation</div>
                     <div class="brand-tag">Providing hope in times of crisis</div>
@@ -62,7 +67,7 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <li>
-                                        <a class="dropdown-item" asp-page="/AdminDashboard">
+                                        <a class="dropdown-item" asp-page="/Admin/AdminDashboard">
                                             <i class="bi bi-speedometer2"></i> Dashboard
                                         </a>
                                     </li>
@@ -81,7 +86,7 @@
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link sign-in-link" asp-page="/AdminLogin">
+                            <a class="nav-link sign-in-link" asp-page="/Admin/AdminLogin">
                                 <i class="bi bi-box-arrow-in-right"></i> Sign In
                             </a>
                         </li>
@@ -91,7 +96,6 @@
         </nav>
     </header>
 
-    <!-- Bootstrap Toast Container -->
     <div class="toast-container position-fixed top-0 end-0 p-3">
         <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -99,8 +103,7 @@
                 <strong class="me-auto" id="toastTitle">Success</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body" id="toastBody">
-                <!-- Dynamic content here -->
+            <div class="toast-body" id="toastBody">             
             </div>
         </div>
     </div>
@@ -117,7 +120,7 @@
             <p class="footer-sub">Together we bring hope, relief, and transparency.</p>
         </div>
     </footer>
-
+ 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

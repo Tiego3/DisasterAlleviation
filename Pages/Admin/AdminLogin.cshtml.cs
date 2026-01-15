@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace DisasterAlleviation.Pages
+namespace DisasterAlleviation.Pages.Admin
 {
     public class AdminLoginModel : PageModel
     {

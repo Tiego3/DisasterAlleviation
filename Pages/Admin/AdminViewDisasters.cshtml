@@ -1,5 +1,5 @@
 ﻿@page
-@model DisasterAlleviation.Pages.AdminViewDisastersModel
+@model DisasterAlleviation.Pages.Admin.AdminViewDisastersModel
 @{
     ViewData["Title"] = "View All Disasters";
 }
@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center mb-4">
         <!-- Back (left) -->
         <div>
-            <a asp-page="/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
+            <a asp-page="/Admin/AdminDashboard" class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
                 <i class="bi bi-arrow-left-circle me-1"></i> Back </a>
         </div>
 
@@ -22,9 +22,9 @@
     </div>
     <!-- Top-right actions -->
     <div class="d-flex gap-2 mb-4">
-        <a asp-page="/AllocateResources" class="btn btn-outline-primary">Allocate Resources</a>
-        <a asp-page="/AllocateVolunteers" class="btn btn-outline-success">Allocate Volunteers</a>
-        <a asp-page="/RegisterDisaster" class="btn btn-outline-info">Register New Disaster</a>
+        <a asp-page="/Admin/AdminAllocateResources" class="btn btn-outline-primary">Allocate Resources</a>
+        <a asp-page="/Admin/AdminAllocateVolunteers" class="btn btn-outline-success">Allocate Volunteers</a>
+        <a asp-page="/Admin/AdminRegisterDisaster" class="btn btn-outline-info">Register New Disaster</a>
     </div>
 
     <!-- Filters / search -->

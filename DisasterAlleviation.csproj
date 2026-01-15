@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Pages\RegisterDisaster.cshtml" />
+    <None Include="Pages\Admin\AdminRegisterDisaster.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace DisasterAlleviation.Pages
+namespace DisasterAlleviation.Pages.Admin
 {
-    public class RegisterDisasterModel : PageModel
+    public class AdminRegisterDisasterModel : PageModel
     {
         private readonly ApplicationDbContext _context;
 
-        public RegisterDisasterModel(ApplicationDbContext context)
+        public AdminRegisterDisasterModel(ApplicationDbContext context)
         {
             _context = context;
         }

@@ -152,6 +152,19 @@ namespace DisasterAlleviation.Pages
             if (string.IsNullOrWhiteSpace(GoodsForm.Description))
                 ModelState.AddModelError("GoodsForm.Description", "Please provide a description.");
 
+            // Validate drop-off scheduling
+            if (GoodsForm.DropoffMethod == "Scheduled")
+            {
+                if (!GoodsForm.DropoffDateTime.HasValue)
+                {
+                    ModelState.AddModelError("GoodsForm.DropoffDateTime", "Please select a drop-off date and time.");
+                }
+                else if (GoodsForm.DropoffDateTime.Value < DateTime.Now)
+                {
+                    ModelState.AddModelError("GoodsForm.DropoffDateTime", "Drop-off time must be in the future.");
+                }
+            }
+
             if (!GoodsForm.IsAnonymous)
             {
                 if (string.IsNullOrWhiteSpace(GoodsForm.DonorName))
@@ -178,6 +191,9 @@ namespace DisasterAlleviation.Pages
                     GoodsForm.Email,
                     GoodsForm.AnonymousId);
 
+                // Generate unique reference number
+                string referenceNumber = GenerateReferenceNumber();
+
                 var goods = new GoodsDonation
                 {
                     DonorName = donor.IsAnonymous ? "Anonymous" : donor.Name ?? "",
@@ -185,11 +201,22 @@ namespace DisasterAlleviation.Pages
                     ItemsCount = GoodsForm.ItemsCount,
                     Description = GoodsForm.Description,
                     DonorId = donor.Id,
-                    DateDonated = DateTime.Now
+                    DateDonated = DateTime.Now,
+                    ReferenceNumber = referenceNumber,
+                    DropoffDateTime = GoodsForm.DropoffMethod == "Scheduled"
+                        ? GoodsForm.DropoffDateTime
+                        : DateTime.Now,
+                    DropoffStatus = GoodsForm.DropoffMethod == "Scheduled" ? "Scheduled" : "Pending"
                 };
 
                 _context.GoodsDonations.Add(goods);
                 await _context.SaveChangesAsync();
+
+                // Store info for success message
+                TempData["GoodsDonationSuccess"] = "true";
+                TempData["ReferenceNumber"] = referenceNumber;
+                TempData["DropoffMethod"] = GoodsForm.DropoffMethod;
+                TempData["DropoffDateTime"] = GoodsForm.DropoffDateTime?.ToString("yyyy-MM-dd HH:mm");
 
                 if (donor.IsAnonymous && !string.IsNullOrEmpty(donor.AnonymousId))
                     TempData["AnonId"] = donor.AnonymousId;
@@ -205,6 +232,14 @@ namespace DisasterAlleviation.Pages
             }
         }
 
+        private string GenerateReferenceNumber()
+        {
+            // Format: GD-YYYYMMDD-XXXX (GD = Goods Donation)
+            var datePart = DateTime.Now.ToString("yyyyMMdd");
+            var random = new Random();
+            var randomPart = random.Next(1000, 9999).ToString();
+            return $"GD-{datePart}-{randomPart}";
+        }
         // -------------------------
         // Helper
         // -------------------------

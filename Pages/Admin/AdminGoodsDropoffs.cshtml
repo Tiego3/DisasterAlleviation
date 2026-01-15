@@ -1,0 +1,248 @@
+﻿@page
+@model DisasterAlleviation.Pages.Admin.AdminGoodsDropoffsModel
+@{
+    ViewData["Title"] = "Manage Goods Drop-offs";
+}
+
+<section class="container mt-4">
+    <a asp-page="/Admin/AdminDashboard"
+       class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn mb-3">
+        <i class="bi bi-arrow-left-circle me-1"></i> Back
+    </a>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Manage Goods Drop-offs</h2>
+            <p class="text-muted">View and confirm scheduled goods donations</p>
+        </div>
+        <button class="btn btn-success" onclick="openRecordDropoffModal()">
+            <i class="bi bi-plus-circle me-1"></i> Record On-Site Drop-off
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0">
+                <h6>Total Drop-offs</h6>
+                <h3>@Model.TotalDropoffs</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0">
+                <h6 class="text-warning">Scheduled</h6>
+                <h3>@Model.ScheduledCount</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0">
+                <h6 class="text-primary">Pending</h6>
+                <h3>@Model.PendingCount</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0">
+                <h6 class="text-success">Completed</h6>
+                <h3>@Model.CompletedCount</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input type="text" id="searchInput" class="form-control"
+                   placeholder="Search by donor or reference...">
+        </div>
+        <div class="col-md-2">
+            <select id="statusFilter" class="form-select">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="date" id="dateFilter" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat.Name">@cat.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2 text-end">
+            <button id="clearFilters" class="btn btn-outline-secondary w-100">
+                Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Drop-offs Table -->
+    <div class="shadow-sm rounded-4 bg-white">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">
+                Drop-offs (@Model.Dropoffs.Count)
+            </h5>
+
+            @if (Model.Dropoffs.Any())
+            {
+                <div class="table-responsive">
+                    <table id="dropoffsTable" class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:120px">Reference #</th>
+                                <th>Donor</th>
+                                <th>Category</th>
+                                <th>Items</th>
+                                <th>Drop-off Time</th>
+                                <th>Status</th>
+                                <th style="width:200px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dropoffsTbody">
+                            @foreach (var drop in Model.Dropoffs)
+                            {
+                                <tr id="row-@drop.Id"
+                                    data-status="@drop.DropoffStatus"
+                                    data-date="@drop.DropoffDateTime?.ToString("yyyy-MM-dd")"
+                                    data-category="@drop.CategoryName"
+                                    data-donor="@drop.DonorName"
+                                    data-reference="@drop.ReferenceNumber">
+
+                                    <td>
+                                        <strong class="text-primary">
+                                            @drop.ReferenceNumber
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <strong>@drop.DonorName</strong><br />
+                                        <small class="text-muted">@drop.ContactInfo</small>
+                                    </td>
+                                    <td>@drop.CategoryName</td>
+                                    <td>@drop.ItemsCount</td>
+                                    <td>
+                                        @(drop.DropoffDateTime?.ToString("MM/dd/yyyy HH:mm") ?? "Not set")
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@GetStatusBadgeClass(drop.DropoffStatus)">
+                                            @drop.DropoffStatus
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm me-1"
+                                                onclick="viewDetails(@drop.Id)">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+
+                                        @if (drop.DropoffStatus != "Completed" &&
+                                                                        drop.DropoffStatus != "Cancelled")
+                                        {
+                                            <button class="btn btn-outline-success btn-sm"
+                                                    onclick="completeDropoff(@drop.Id, '@drop.ReferenceNumber')">
+                                                <i class="bi bi-check-circle"></i> Complete
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No goods drop-offs found.
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        async function viewDetails(id) {
+            try {
+                const resp = await fetch(`?handler=Details&id=${id}`);
+                if (!resp.ok) throw new Error();
+
+                const d = await resp.json();
+
+                const html = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-3">Reference Information</h6>
+                            <div class="bg-light p-3 rounded mb-3">
+                                <p class="mb-1"><strong>Reference Number:</strong></p>
+                                <h4 class="text-primary mb-0">${escapeHtml(d.referenceNumber)}</h4>
+                            </div>
+
+                            <h6 class="fw-bold mb-2">Donor Information</h6>
+                            <p class="mb-1"><strong>Name:</strong> ${escapeHtml(d.donorName)}</p>
+                            <p class="mb-1"><strong>Contact:</strong> ${escapeHtml(d.contactInfo)}</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-2">Donation Details</h6>
+                            <p class="mb-1"><strong>Category:</strong> ${escapeHtml(d.categoryName)}</p>
+                            <p class="mb-1"><strong>Items:</strong> ${d.itemsCount}</p>
+                            <p class="mb-3"><strong>Description:</strong> ${escapeHtml(d.description)}</p>
+
+                            <h6 class="fw-bold mb-2">Schedule</h6>
+                            <p class="mb-1">
+                                <strong>Drop-off Time:</strong>
+                                ${d.dropoffDateTime
+                                    ? new Date(d.dropoffDateTime).toLocaleString()
+                                    : 'Not set'}
+                            </p>
+                            <p class="mb-1">
+                                <strong>Status:</strong>
+                                <span class="badge bg-info">
+                                    ${escapeHtml(d.dropoffStatus)}
+                                </span>
+                            </p>
+                            ${d.completedAt
+                                ? `<p class="mb-1"><strong>Completed:</strong> ${new Date(d.completedAt).toLocaleString()}</p>`
+                                : ''}
+                        </div>
+                    </div>
+                    ${d.adminNotes
+                        ? `<hr /><p><strong>Admin Notes:</strong> ${escapeHtml(d.adminNotes)}</p>`
+                        : ''}
+                `;
+
+                document.getElementById('modalBody').innerHTML = html;
+                modal.show();
+            }
+            catch {
+                Swal.fire('Error', 'Unable to load details', 'error');
+            }
+        }
+
+        function escapeHtml(s) {
+            if (!s) return '';
+            return String(s)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;');
+        }
+    </script>
+}
+
+@functions {
+    string GetStatusBadgeClass(string status) =>
+        status switch
+        {
+            "Pending" => "primary",
+            "Scheduled" => "warning",
+            "Completed" => "success",
+            "Cancelled" => "secondary",
+            _ => "info"
+        };
+}

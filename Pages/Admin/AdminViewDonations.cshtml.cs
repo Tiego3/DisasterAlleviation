@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DisasterAlleviation.Pages
+namespace DisasterAlleviation.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
     public class AdminViewDonationsModel : PageModel

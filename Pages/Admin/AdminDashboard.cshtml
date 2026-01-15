@@ -1,5 +1,5 @@
 ﻿@page
-@model DisasterAlleviation.Pages.AdminDashboardModel
+@model DisasterAlleviation.Pages.Admin.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
@@ -17,26 +17,26 @@
     <div class="row text-center g-4">
         <div class="col-md-3">
             <div class="summary-card bg-success-subtle shadow-sm p-4 rounded-4">
-                <h3 class="fw-bold text-success"><span>R </span>@Model.TotalMonetary</h3>
-                <p class="mb-0 text-muted">Pending Allocation</p>
+                <h3 class="fw-bold text-success"><span>R </span>@Model.CurrentBalance</h3>
+                <p class="mb-0 text-muted">Current Balance</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="summary-card bg-primary-subtle shadow-sm p-4 rounded-4">
-                <h3 class="fw-bold text-primary">@Model.TotalGoods</h3>
+                <h3 class="fw-bold text-primary">@Model.GoodsAvailable</h3>
                 <p class="mb-0 text-muted">Goods Available</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="summary-card bg-danger-subtle shadow-sm p-4 rounded-4">
-                <h3 class="fw-bold text-danger">4</h3>
+                <h3 class="fw-bold text-primary">@Model.ActiveDisasters</h3>
                 <p class="mb-0 text-muted">Active Disasters</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="summary-card bg-secondary-subtle shadow-sm p-4 rounded-4">
                 <h3 class="fw-bold text-secondary">@Model.TotalDonors</h3>
-                <p class="mb-0 text-muted">New Donors Today</p>
+                <p class="mb-0 text-muted">Total Donors</p>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">Register New Disaster</h5>
                     <p class="text-muted small">Create entry for new disaster requiring aid</p>
-                    <a asp-page="/RegisterDisaster" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminRegisterDisaster" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">Manage Categories</h5>
                     <p class="text-muted small">Define new categories for goods donations</p>
-                    <a asp-page="/Categories/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminCategories" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
 
@@ -104,7 +104,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">View All Donations</h5>
                     <p class="text-muted small">Browse all monetary and goods donations</p>
-                    <a asp-page="/AdminViewDonations" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminViewDonations" class="btn btn-gradient w-100">+ Get Started</a>
 
                 </div>
             </div>
@@ -116,7 +116,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">Allocate Resources</h5>
                     <p class="text-muted small">Assign money and goods to active disasters</p>
-                    <a asp-page="/Resources/Allocate" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminAllocateResources" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
     
@@ -128,7 +128,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">View All Disasters</h5>
                     <p class="text-muted small">Monitor active and past disaster responses</p>
-                    <a asp-page="/AdminViewDisasters" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminViewDisasters" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
 
@@ -139,7 +139,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">View All Volunteers</h5>
                     <p class="text-muted small">Manage volunteer applications and approvals</p>
-                    <a asp-page="/AdminVolunteerManagement" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminVolunteerManagement" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
 
@@ -150,7 +150,7 @@
                     </div>
                     <h5 class="fw-bold mb-2">Manage Goods Drop-offs</h5>
                     <p class="text-muted small">View and confirm scheduled goods donations</p>
-                    <a asp-page="/GoodsDropoffs/Index" class="btn btn-gradient w-100">+ Get Started</a>
+                    <a asp-page="/Admin/AdminGoodsDropoffs" class="btn btn-gradient w-100">+ Get Started</a>
                 </div>
             </div>
         </div>

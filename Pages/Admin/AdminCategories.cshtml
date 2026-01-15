@@ -1,0 +1,292 @@
+﻿@page
+@model DisasterAlleviation.Pages.Admin.AdminCategoriesModel
+@{
+    ViewData["Title"] = "Manage Categories";
+}
+
+<section class="container mt-4">
+    <a asp-page="/Admin/AdminDashboard"
+       class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn mb-3">
+        <i class="bi bi-arrow-left-circle me-1"></i> Back
+    </a>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Manage Categories</h2>
+            <p class="text-muted">Define and manage goods donation categories</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCreateModal()">
+            <i class="bi bi-plus-circle me-1"></i> Add Category
+        </button>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0">
+                <h6>Total Categories</h6>
+                <h3>@Model.Categories.Count</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0">
+                <h6 class="text-success">Active Donations</h6>
+                <h3>@Model.TotalDonations</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0">
+                <h6 class="text-primary">Most Used</h6>
+                <h3>@(Model.MostUsedCategory ?? "N/A")</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Table -->
+    <div class="shadow-sm rounded-4 bg-white">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">Categories (@Model.Categories.Count)</h5>
+
+            @if (Model.Categories.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:50px">#</th>
+                                <th>Category Name</th>
+                                <th>Total Donations</th>
+                                <th>Created Date</th>
+                                <th style="width:200px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Categories.Count; i++)
+                            {
+                                var cat = Model.Categories[i];
+                                var donationCount = Model.CategoryDonationCounts.GetValueOrDefault(cat.Id, 0);
+                                <tr id="row-@cat.Id">
+                                    <td>@(i + 1)</td>
+                                    <td><strong>@cat.Name</strong></td>
+                                    <td>@donationCount</td>
+                                    <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm me-1"
+                                                onclick="openEditModal(@cat.Id, '@cat.Name')">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm"
+                                                onclick="deleteCategory(@cat.Id, '@cat.Name', @donationCount)">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No categories defined yet. Click "Add Category" to create one.
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Create/Edit Category Modal -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <input type="hidden" id="categoryId" value="0">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label fw-semibold">Category Name *</label>
+                        <input type="text" id="categoryName" class="form-control"
+                               placeholder="e.g., Medical Supplies, Clothing" required>
+                        <div class="invalid-feedback">Please enter a category name.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCategory()">
+                    <i class="bi bi-check-circle me-1"></i> Save Category
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+    <div id="toastNotification" class="toast align-items-center text-bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage">Action successful</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const modalEl = document.getElementById('categoryModal');
+        const modal = new bootstrap.Modal(modalEl);
+        const toastEl = document.getElementById('toastNotification');
+        const toast = new bootstrap.Toast(toastEl);
+        const toastMessage = document.getElementById('toastMessage');
+
+        function getCsrfToken() {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            if (meta) return meta.getAttribute('content');
+            const input = document.querySelector('input[name="__RequestVerificationToken"]');
+            return input ? input.value : null;
+        }
+
+        function openCreateModal() {
+            document.getElementById('modalTitle').textContent = 'Add Category';
+            document.getElementById('categoryId').value = '0';
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryName').classList.remove('is-invalid');
+            modal.show();
+        }
+
+        function openEditModal(id, name) {
+            document.getElementById('modalTitle').textContent = 'Edit Category';
+            document.getElementById('categoryId').value = id;
+            document.getElementById('categoryName').value = name;
+            document.getElementById('categoryName').classList.remove('is-invalid');
+            modal.show();
+        }
+
+        async function saveCategory() {
+            const id = document.getElementById('categoryId').value;
+            const name = document.getElementById('categoryName').value.trim();
+            const nameInput = document.getElementById('categoryName');
+
+            if (!name) {
+                nameInput.classList.add('is-invalid');
+                return;
+            }
+
+            nameInput.classList.remove('is-invalid');
+            const token = getCsrfToken();
+            const isEdit = id !== '0';
+
+            try {
+                const url = isEdit
+                    ? `?handler=Update&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}`
+                    : `?handler=Create&name=${encodeURIComponent(name)}`;
+
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token || '',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!resp.ok) {
+                    const txt = await resp.text();
+                    throw new Error(`Server returned ${resp.status}: ${txt}`);
+                }
+
+                const result = await resp.json();
+
+                if (result?.success) {
+                    modal.hide();
+                    toastMessage.textContent = isEdit
+                        ? 'Category updated successfully!'
+                        : 'Category created successfully!';
+                    toast.show();
+
+                    // Update table row or reload
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    throw new Error('Unexpected response from server.');
+                }
+            } catch (err) {
+                console.error('saveCategory error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Failed to save category: ${err.message}`,
+                    confirmButtonColor: '#d33'
+                });
+            }
+        }
+
+        async function deleteCategory(id, name, donationCount) {
+            if (donationCount > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cannot Delete',
+                    text: `"${name}" has ${donationCount} donation(s) associated with it. Please reassign or remove donations first.`,
+                    confirmButtonColor: '#f97015'
+                });
+                return;
+            }
+
+            const result = await Swal.fire({
+                title: 'Delete Category?',
+                text: `Are you sure you want to delete "${name}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it'
+            });
+
+            if (!result.isConfirmed) return;
+
+            const token = getCsrfToken();
+
+            try {
+                const resp = await fetch(`?handler=Delete&id=${encodeURIComponent(id)}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token || '',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!resp.ok) {
+                    const txt = await resp.text();
+                    throw new Error(`Server returned ${resp.status}: ${txt}`);
+                }
+
+                const result = await resp.json();
+
+                if (result?.success) {
+                    toastMessage.textContent = 'Category deleted successfully!';
+                    toast.show();
+
+                    // Remove row from table
+                    const row = document.getElementById(`row-${id}`);
+                    if (row) row.remove();
+
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    throw new Error('Unexpected response from server.');
+                }
+            } catch (err) {
+                console.error('deleteCategory error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Failed to delete category: ${err.message}`,
+                    confirmButtonColor: '#d33'
+                });
+            }
+        }
+    </script>
+}

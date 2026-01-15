@@ -1,6 +1,6 @@
 ﻿namespace DisasterAlleviation.Models
 {
-    public class GoodsDropoffViewModel
+    public class GoodsDropoff
     {
         public int Id { get; set; }
         public string ReferenceNumber { get; set; }

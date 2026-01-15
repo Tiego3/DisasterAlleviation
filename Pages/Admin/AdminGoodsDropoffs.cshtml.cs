@@ -17,7 +17,7 @@ namespace DisasterAlleviation.Pages.Admin
             _context = context;
         }
 
-        public List<GoodsDropoffViewModel> Dropoffs { get; set; } = new();
+        public List<GoodsDropoff> Dropoffs { get; set; } = new();
         public List<Category> Categories { get; set; } = new();
         public int TotalDropoffs { get; set; }
         public int ScheduledCount { get; set; }
@@ -32,7 +32,7 @@ namespace DisasterAlleviation.Pages.Admin
                 .Include(d => d.Category)
                 .Include(d => d.Donor)
                 .OrderByDescending(d => d.DropoffDateTime ?? d.DateDonated)
-                .Select(d => new GoodsDropoffViewModel
+                .Select(d => new GoodsDropoff
                 {
                     Id = d.Id,
                     ReferenceNumber = d.ReferenceNumber ?? "N/A",

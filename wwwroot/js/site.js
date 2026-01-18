@@ -37,86 +37,165 @@ document.addEventListener("DOMContentLoaded", function () {
     const notificationType = document.querySelector('meta[name="notification-type"]');
     const notificationMessage = document.querySelector('meta[name="notification-message"]');
 
-    if (notificationType && notificationMessage) {
+    if (notificationType) {
         const type = notificationType.getAttribute("content");
-        const message = notificationMessage.getAttribute("content");
+        const message = notificationMessage ? notificationMessage.getAttribute("content") : "";
 
         showToastNotification(type, message);
     }
 
-    function showToastNotification(type, message) {
+     function showToastNotification(type, message) {
         const toastEl = document.getElementById("notificationToast");
         const toastTitle = document.getElementById("toastTitle");
         const toastBody = document.getElementById("toastBody");
 
         if (!toastEl || !toastTitle || !toastBody) return;
 
-        // Configure toast based on type
-        if (type === "donate") {
-            toastTitle.textContent = "Thank You for Your Donation!";
-            toastBody.innerHTML = `
-                <p class="mb-2">Your <strong>Anonymous Donor ID</strong> is:</p>
-                <h5 class="text-primary fw-bold mb-2">${message}</h5>
-                <p class="mb-0 small">Please save this ID for future donations.</p>
-            `;
+        // Remove old classes and add new styling
+        toastEl.className = "toast align-items-center border-0";
 
-            // Show toast (manual dismiss only - no autohide)
+        // Configure toast based on type
+        if (type === "donate-anonymous") {
+            // Anonymous Monetary Donation
+            toastEl.classList.add("text-bg-success");
+            toastTitle.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Thank You for Your Donation!';
+            toastBody.innerHTML = `
+            <div class="mb-2">Your <strong>Anonymous Donor ID</strong> is:</div>
+            <div class="bg-white bg-opacity-25 p-2 rounded text-center mb-2">
+                <h5 class="fw-bold mb-0">${message}</h5>
+            </div>
+            <small class="opacity-75">Please save this ID for future donations.</small>
+        `;
+
             const toast = new bootstrap.Toast(toastEl, { autohide: false });
             toast.show();
 
-            // Redirect only after user closes the toast
             toastEl.addEventListener('hidden.bs.toast', function () {
                 window.location.href = "/Index";
-            });
+            }, { once: true });
+
+        } else if (type === "donate-named") {
+            // Named Monetary Donation
+            toastEl.classList.add("text-bg-success");
+            toastTitle.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Thank You for Your Donation!';
+            toastBody.innerHTML = `
+            <div class="mb-2">Thank you, <strong>${message}</strong>!</div>
+            <div class="opacity-90">Your generous contribution helps us provide critical relief to communities in crisis.</div>
+            <div class="mt-3 opacity-75"><small>Your donation has been recorded successfully.</small></div>
+        `;
+
+            const toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 4000 });
+            toast.show();
+
+            toastEl.addEventListener('hidden.bs.toast', function () {
+                window.location.href = "/Index";
+            }, { once: true });
 
         } else if (type === "volunteer") {
-            toastTitle.textContent = "Application Submitted!";
-            toastBody.innerHTML = `<p class="mb-0">${message}</p>`;
+            // Volunteer Application
+            toastEl.classList.add("text-bg-success");
+            toastTitle.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Application Submitted!';
+            toastBody.innerHTML = `<div class="opacity-90">${message}</div>`;
 
-            // Show toast with auto-hide after 3 seconds
             const toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 3000 });
             toast.show();
 
-            // Redirect after toast is hidden
             toastEl.addEventListener('hidden.bs.toast', function () {
                 window.location.href = "/Index";
-            });
+            }, { once: true });
+
         } else if (type === "goods-donation") {
-            const reference = document.querySelector('meta[name="notification-reference"]')?.getAttribute('content');
-            const method = document.querySelector('meta[name="notification-method"]')?.getAttribute('content');
-            const datetime = document.querySelector('meta[name="notification-datetime"]')?.getAttribute('content');
+            // Goods Donation
+            const referenceNumber = document.querySelector('meta[name="notification-reference"]')?.getAttribute('content');
+            const dropoffMethod = document.querySelector('meta[name="notification-method"]')?.getAttribute('content');
+            const dropoffDateTime = document.querySelector('meta[name="notification-datetime"]')?.getAttribute('content');
+            const isAnonymous = document.querySelector('meta[name="notification-anonymous"]')?.getAttribute('content') === 'true';
+            const anonId = document.querySelector('meta[name="notification-anonid"]')?.getAttribute('content');
+            const donorName = document.querySelector('meta[name="notification-donorname"]')?.getAttribute('content');
 
-            toastTitle.textContent = "Donation Submitted!";
+            toastEl.classList.add("text-bg-success");
+            toastTitle.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Goods Donation Submitted!';
 
-            if (method === "Scheduled") {
-                toastBody.innerHTML = `
-            <p class="mb-2"><strong>Your goods donation has been scheduled.</strong></p>
-            <div class="bg-light p-2 rounded mb-2">
-                <p class="mb-1"><strong>Reference Number:</strong></p>
-                <h5 class="text-primary fw-bold mb-0">${reference}</h5>
-            </div>
-            <p class="mb-1"><strong>Drop-off Time:</strong> ${datetime}</p>
-            <p class="mb-0 small text-muted">Please present this reference number when you arrive.</p>
-        `;
-            } else {
-                toastBody.innerHTML = `
-            <p class="mb-2"><strong>Your donation is ready for drop-off.</strong></p>
-            <div class="bg-light p-2 rounded mb-2">
-                <p class="mb-1"><strong>Reference Number:</strong></p>
-                <h5 class="text-primary fw-bold mb-0">${reference}</h5>
-            </div>
-            <p class="mb-0 small text-muted">Present this number at our facility.</p>
-        `;
+            let bodyContent = '';
+
+            // Thank you message based on donor type
+            if (isAnonymous) {
+                bodyContent += `<div class="mb-3">Thank you for your generous donation!</div>`;
+            } else if (donorName) {
+                bodyContent += `<div class="mb-3">Thank you, <strong>${donorName}</strong>, for your generous donation!</div>`;
             }
 
+            // Reference number (always show for goods donations)
+            if (referenceNumber) {
+                bodyContent += `
+                <div class="mb-2">Your <strong>Reference Number</strong> is:</div>
+                <div class="bg-white bg-opacity-25 p-2 rounded text-center mb-3">
+                    <h5 class="fw-bold mb-0">${referenceNumber}</h5>
+                </div>
+            `;
+            }
+
+            // Anonymous ID (only for anonymous donors)
+            if (isAnonymous && anonId) {
+                bodyContent += `
+                <div class="mb-2">Your <strong>Anonymous Donor ID</strong> is:</div>
+                <div class="bg-white bg-opacity-25 p-2 rounded text-center mb-3">
+                    <h5 class="fw-bold mb-0">${anonId}</h5>
+                </div>
+            `;
+            }
+
+            // Drop-off information
+            if (dropoffMethod === "Scheduled" && dropoffDateTime) {
+                const formattedDate = new Date(dropoffDateTime).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                bodyContent += `
+                <div class="mt-2">
+                    <small class="opacity-75">
+                        <i class="bi bi-calendar-event me-1"></i>
+                        Scheduled for: ${formattedDate}
+                    </small>
+                </div>
+            `;
+            } else if (dropoffMethod === "Immediate") {
+                bodyContent += `
+                <div class="mt-2">
+                    <small class="opacity-75">
+                        <i class="bi bi-clock me-1"></i>
+                        Please present your reference number upon arrival.
+                    </small>
+                </div>
+            `;
+            }
+
+            // Footer message
+            bodyContent += `
+            <div class="mt-2">
+                <small class="opacity-75">
+                    ${isAnonymous
+                    ? 'Please save both your reference number and anonymous ID for your records.'
+                    : 'Please save your reference number for your records.'}
+                </small>
+            </div>
+        `;
+
+            toastBody.innerHTML = bodyContent;
+
+            // Show toast (manual dismiss - important info)
             const toast = new bootstrap.Toast(toastEl, { autohide: false });
             toast.show();
 
             toastEl.addEventListener('hidden.bs.toast', function () {
                 window.location.href = "/Index";
-            });
+            }, { once: true });
         }
     }
+
 
     // ==========================================
     // DONATE FORM - ANONYMOUS TOGGLE

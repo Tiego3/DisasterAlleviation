@@ -97,17 +97,15 @@
     </header>
 
     <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
+        <div id="notificationToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header border-0">
                 <strong class="me-auto" id="toastTitle">Success</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body" id="toastBody">             
+            <div class="toast-body" id="toastBody">
             </div>
         </div>
     </div>
-
     <!-- MAIN CONTENT -->
     <main class="flex-shrink-0">
         @RenderBody()

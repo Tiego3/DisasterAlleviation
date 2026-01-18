@@ -419,7 +419,7 @@ a {
 /* =======================================
    TOAST NOTIFICATIONS
 ======================================= */
-.toast-container {
+/*.toast-container {
     z-index: 1080;
 }
 
@@ -440,7 +440,68 @@ a {
     font-size: 0.95rem;
     line-height: 1.5;
     padding: 1rem;
+}*/
+/* =======================================
+   ENHANCED TOAST NOTIFICATIONS
+   ======================================= */
+.toast-container {
+    z-index: 1080;
 }
+
+.toast {
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    min-width: 350px;
+    border: none;
+    backdrop-filter: blur(10px);
+}
+
+    .toast.text-bg-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: white;
+    }
+
+    .toast.text-bg-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        color: white;
+    }
+
+    .toast.text-bg-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+        color: white;
+    }
+
+.toast-header {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px 12px 0 0;
+    backdrop-filter: blur(10px);
+    color: white;
+}
+
+    .toast-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+.toast-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 1.25rem;
+    color: white;
+}
+
+.toast .d-flex {
+    align-items: center;
+}
+
+.toast .btn-close-white {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+    .toast .btn-close-white:hover {
+        opacity: 1;
+    }
 
 /* =======================================
    FORM STYLING

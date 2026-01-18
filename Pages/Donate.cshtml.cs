@@ -118,8 +118,17 @@ namespace DisasterAlleviation.Pages
                 _context.MonetaryDonations.Add(donation);
                 await _context.SaveChangesAsync();
 
+                // Set appropriate TempData based on donor type
                 if (donor.IsAnonymous && !string.IsNullOrEmpty(donor.AnonymousId))
+                {
+                    TempData["MonetaryDonationSuccess"] = "anonymous";
                     TempData["AnonId"] = donor.AnonymousId;
+                }
+                else
+                {
+                    TempData["MonetaryDonationSuccess"] = "named";
+                    TempData["DonorName"] = donor.Name;
+                }
 
                 return RedirectToPage("/Index");
             }
@@ -218,8 +227,17 @@ namespace DisasterAlleviation.Pages
                 TempData["DropoffMethod"] = GoodsForm.DropoffMethod;
                 TempData["DropoffDateTime"] = GoodsForm.DropoffDateTime?.ToString("yyyy-MM-dd HH:mm");
 
+                // Set donor info based on type
                 if (donor.IsAnonymous && !string.IsNullOrEmpty(donor.AnonymousId))
+                {
+                    TempData["IsAnonymous"] = "true";
                     TempData["AnonId"] = donor.AnonymousId;
+                }
+                else
+                {
+                    TempData["IsAnonymous"] = "false";
+                    TempData["DonorName"] = donor.Name;
+                }
 
                 return RedirectToPage("/Index");
             }

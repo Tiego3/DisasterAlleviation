@@ -3,26 +3,36 @@
 @{
     ViewData["Title"] = "Home";
 }
-
-@if (TempData["AnonId"] != null)
+@* Only set ONE notification type at a time *@
+@if (TempData["GoodsDonationSuccess"] != null)
 {
-    <meta name="notification-type" content="donate" />
-    <meta name="notification-message" content="@TempData["AnonId"]" />
+    <meta name="notification-type" content="goods-donation" />
+    <meta name="notification-message" content="goods" />
+    <meta name="notification-reference" content="@TempData["ReferenceNumber"]" />
+    <meta name="notification-method" content="@TempData["DropoffMethod"]" />
+    <meta name="notification-datetime" content="@TempData["DropoffDateTime"]" />
+    <meta name="notification-anonymous" content="@TempData["IsAnonymous"]" />
+    <meta name="notification-anonid" content="@TempData["AnonId"]" />
+    <meta name="notification-donorname" content="@TempData["DonorName"]" />
 }
-
-@if (TempData["VolunteerSuccess"] != null)
+else if (TempData["VolunteerSuccess"] != null)
 {
     <meta name="notification-type" content="volunteer" />
     <meta name="notification-message" content="@TempData["VolunteerSuccess"]" />
 }
-@if (TempData["GoodsDonationSuccess"] != null)
+else if (TempData["MonetaryDonationSuccess"] != null)
 {
-    <meta name="notification-type" content="goods-donation" />
-    <meta name="notification-reference" content="@TempData["ReferenceNumber"]" />
-    <meta name="notification-method" content="@TempData["DropoffMethod"]" />
-    <meta name="notification-datetime" content="@TempData["DropoffDateTime"]" />
+    @if (TempData["MonetaryDonationSuccess"].ToString() == "anonymous")
+    {
+        <meta name="notification-type" content="donate-anonymous" />
+        <meta name="notification-message" content="@TempData["AnonId"]" />
+    }
+    else
+    {
+        <meta name="notification-type" content="donate-named" />
+        <meta name="notification-message" content="@TempData["DonorName"]" />
+    }
 }
-
 <!-- Hero Section -->
 <section class="hero">
     <div class="hero-overlay">

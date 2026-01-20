@@ -177,6 +177,20 @@ a {
     color: white;
 }
 
+.btn-gradient {
+    background: #4f12de;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: #059669 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
 /* Donate Now Button (Hero) */
 .hero .btn-primary {
     background-color: #fff;
@@ -300,6 +314,41 @@ a {
 .impact-foot {
     color: #8b93a6;
     font-size: 14px;
+}
+
+/* =======================================
+   ENHANCED BUTTON HOVER STYLES
+   ======================================= */
+
+/* Admin Dashboard - Get Started buttons */
+.function-card .btn-gradient:hover {
+    background: #059669 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+/* Register Disaster button */
+.register-disaster .btn-gradient:hover {
+    background: #059669 !important;
+    color: #fff !important;
+}
+
+/* Allocate Resources button */
+.btn-gradient:hover,
+button[type="submit"].btn-gradient:hover {
+    background: #059669 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+/* Ensure hover state works on all primary action buttons */
+.btn-primary:hover,
+.btn-success:hover {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+    color: #fff !important;
 }
 
 /* =======================================
@@ -525,7 +574,45 @@ a {
         box-shadow: 0 0 0 0.2rem rgba(79, 18, 222, 0.1);
     }
 
+/* =======================================
+   GOOGLE PLACES AUTOCOMPLETE STYLING
+   ======================================= */
 
+/* Hide the Google attribution (optional) */
+.pac-container {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 4px;
+    font-family: inherit;
+}
+
+.pac-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-top: 1px solid #e5e7eb;
+}
+
+    .pac-item:first-child {
+        border-top: none;
+    }
+
+    .pac-item:hover {
+        background-color: #f3f4f6;
+    }
+
+.pac-icon {
+    display: none; /* Hide default Google icons */
+}
+
+.pac-item-query {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.pac-matched {
+    font-weight: 700;
+    color: #4f12de;
+}
 
 /* =======================================
    RESPONSIVE

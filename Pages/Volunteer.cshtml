@@ -53,7 +53,11 @@
             </div>
             <div class="col-md-6">
                 <label asp-for="Input.Location" class="form-label fw-semibold">Location <span>*</span></label>
-                <input asp-for="Input.Location" class="form-control" placeholder="Enter your city" />
+                <input asp-for="Input.Location"
+                       id="Location"
+                       class="form-control"
+                       placeholder="Start typing your city (e.g., Polokwane, Johannesburg)"
+                       autocomplete="off" />
                 <span asp-validation-for="Input.Location" class="text-danger"></span>
             </div>
         </div>
@@ -85,11 +89,31 @@
         </div>
 
         <!-- Available Dates -->
-        <div class="mb-3">
-            <label asp-for="Input.AvailableDates" class="form-label fw-semibold">Available Dates <span>*</span></label>
-            <input asp-for="Input.AvailableDates" type="date" class="form-control" />
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Input.AvailableFromDate" class="form-label fw-semibold">
+                    Available From *
+                </label>
+                <input asp-for="Input.AvailableFromDate"
+                       type="date"
+                       class="form-control"
+                       id="availableFrom"
+                       required />
+                <span asp-validation-for="Input.AvailableFromDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Input.AvailableUntilDate" class="form-label fw-semibold">
+                    Available Until *
+                </label>
+                <input asp-for="Input.AvailableUntilDate"
+                       type="date"
+                       class="form-control"
+                       id="availableUntil"
+                       required />
+                <span asp-validation-for="Input.AvailableUntilDate" class="text-danger"></span>
+                <small class="text-muted">End date must be after start date</small>
+            </div>
         </div>
-
         <!-- Additional Info -->
         <div class="mb-3">
             <label asp-for="Input.EmergencyContact" class="form-label fw-semibold">Emergency Contact <span>*</span></label>
@@ -118,4 +142,33 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+         // Date range validation
+        const fromDateInput = document.getElementById('availableFrom');
+        const untilDateInput = document.getElementById('availableUntil');
+
+        if (fromDateInput && untilDateInput) {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            fromDateInput.min = today;
+            untilDateInput.min = today;
+
+            // Validate that end date is after start date
+            fromDateInput.addEventListener('change', function() {
+                untilDateInput.min = this.value;
+                if (untilDateInput.value && untilDateInput.value < this.value) {
+                    untilDateInput.value = '';
+                    alert('End date must be after start date');
+                }
+            });
+
+            untilDateInput.addEventListener('change', function() {
+                if (fromDateInput.value && this.value < fromDateInput.value) {
+                    this.value = '';
+                    alert('End date must be after start date');
+                }
+            });
+        }
+    </script>
 }

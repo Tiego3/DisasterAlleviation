@@ -83,10 +83,13 @@
                                 <td>
                                     <span class="badge bg-@(v.Status == "Approved" ? "success" : v.Status == "Rejected" ? "danger" : "warning text-dark")">@v.Status</span>
                                 </td>
-                                <td>@(v.AvailableDates?.ToString("MM/dd/yyyy") ?? "—")</td>
+                                <td>
+                                    <strong>From:</strong> @(v.AvailableFromDate?.ToString("MM/dd/yyyy") ?? "—")<br />
+                                    <strong>Until:</strong> @(v.AvailableUntilDate?.ToString("MM/dd/yyyy") ?? "—")
+                                </td>
                                 <td>
                                     <button class="btn btn-outline-primary btn-sm view-details-btn" data-id="@v.Id">View Details</button>
-                                    <button class="btn btn-primary btn-sm">Allocate to Disaster</button>
+                                    <a asp-page="/Admin/AdminAllocateVolunteers" class="btn btn-primary fw-semibold">Allocate to Disaster</a>
                                 </td>
                             </tr>
                         }

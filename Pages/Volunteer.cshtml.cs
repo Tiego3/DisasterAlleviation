@@ -38,6 +38,16 @@ namespace DisasterAlleviation.Pages
             [Required, Display(Name = "Availability")]
             public string Availability { get; set; }
 
+            [Required(ErrorMessage = "Start date is required")]
+            [Display(Name = "Available From")]
+            [DataType(DataType.Date)]
+            public DateTime? AvailableFromDate { get; set; }
+
+            [Required(ErrorMessage = "End date is required")]
+            [Display(Name = "Available Until")]
+            [DataType(DataType.Date)]
+            public DateTime? AvailableUntilDate { get; set; }
+
             [Required, Display(Name = "Skills & Expertise")]
             public string Skills { get; set; }
 
@@ -67,6 +77,15 @@ namespace DisasterAlleviation.Pages
 
             var user = await _userManager.GetUserAsync(User);
 
+            if (Input.AvailableFromDate.HasValue && Input.AvailableUntilDate.HasValue)
+            {
+                if (Input.AvailableUntilDate < Input.AvailableFromDate)
+                {
+                    ModelState.AddModelError("Input.AvailableUntilDate", "End date must be after start date");
+                    return Page();
+                }
+            }
+
             var volunteer = new Volunteer
             {
                 UserId = user?.Id,
@@ -77,15 +96,14 @@ namespace DisasterAlleviation.Pages
                 Availability = Input.Availability,
                 Skills = Input.Skills,
                 PreviousExperience = Input.PreviousExperience,
-                AvailableDates = Input.AvailableDates,
+                AvailableFromDate = Input.AvailableFromDate,
+                AvailableUntilDate = Input.AvailableUntilDate,
                 EmergencyContact = Input.EmergencyContact,
                 HasTransportation = Input.HasTransportation,
                 WillingToTravel = Input.WillingToTravel,
                 AdditionalInfo = Input.AdditionalInfo,
-
-                // Set backend-only fields safely
-                Status = "Pending", // default when submitted
-                CanTravel = Input.WillingToTravel, 
+                Status = "Pending",
+                CanTravel = Input.WillingToTravel,
                 DateApplied = DateTime.UtcNow
             };
 

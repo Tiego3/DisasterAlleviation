@@ -51,7 +51,11 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="Input.Location" class="form-label fw-semibold">Location *</label>
-                            <input asp-for="Input.Location" class="form-control form-control-lg" placeholder="Enter disaster location" />
+                            <input asp-for="Input.Location"
+                                   id="location"
+                                   class="form-control form-control-lg"
+                                   placeholder="Start typing location (e.g., Durban, Cape Town)"
+                                   autocomplete="off" />
                             <span asp-validation-for="Input.Location" class="text-danger small"></span>
                         </div>
 
@@ -93,7 +97,7 @@
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-gradient btn-lg fw-semibold">
-                                <i class="bi bi-check-circle me-2"></i> Register Disaster
+                                <i class="bi me-2"></i> Register Disaster
                             </button>
                         </div>
                     </form>
@@ -133,6 +137,21 @@
 
         .back-btn {
             font-size: 0.9rem;
+        }
+
+        .btn-gradient {
+            background: #4f12de;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: #059669 !important;
+            color: #fff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
     </style>
 }

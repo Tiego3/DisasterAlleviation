@@ -1,16 +1,32 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     const modalEl = document.getElementById("volunteerModal");
-    const modal = new bootstrap.Modal(modalEl);
+    const modal = new bootstrap.Modal(modalEl, {
+        backdrop: true,
+        keyboard: true,
+        focus: true
+    });
+
+    
     const toastEl = document.getElementById("toastNotification");
     const toast = new bootstrap.Toast(toastEl);
     const toastMessage = document.getElementById("toastMessage");
 
+    //  Removing lingering backdrops &  Restore body scroll
+    modalEl.addEventListener('hidden.bs.modal', function () {
+        // Remove any lingering backdrops
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+    });
+
     function getCsrfToken() {
-        // meta tag approach (recommended)
+      
         const meta = document.querySelector('meta[name="csrf-token"]');
         if (meta) return meta.getAttribute('content');
 
-        // fallback: hidden form field approach
         const input = document.querySelector('input[name="__RequestVerificationToken"]');
         return input ? input.value : null;
     }
@@ -22,6 +38,7 @@
                 const response = await fetch(`?handler=VolunteerDetails&id=${id}`);
                 if (!response.ok) throw new Error(`Failed to load details: ${response.status}`);
                 const volunteer = await response.json();
+                console.log('Volunteer data:', volunteer);
 
                 const html = `
                     <div class="col-md-6">
@@ -39,7 +56,8 @@
                         <p><strong>Schedule:</strong> ${volunteer.availability || "—"}</p>
                         <p><strong>Transportation:</strong> ${volunteer.hasTransportation ? "Yes" : "No"}</p>
                         <p><strong>Can Travel:</strong> ${volunteer.willingToTravel ? "Yes" : "No"}</p>
-                        <p><strong>Date Available:</strong> ${volunteer.availableDates ? new Date(volunteer.availableDates).toLocaleDateString() : "—"}</p>
+                        <p><strong>Available From:</strong> ${volunteer.availableFromDate ? new Date(volunteer.availableFromDate).toLocaleDateString() : "—"}</p>
+                        <p><strong>Available Until:</strong> ${volunteer.availableUntilDate ? new Date(volunteer.availableUntilDate).toLocaleDateString() : "—"}</p>
                     </div>
                 `;
                 document.getElementById("volunteerDetailsContent").innerHTML = html;
@@ -70,11 +88,9 @@
                     "RequestVerificationToken": token || "",
                     "Accept": "application/json"
                 }
-                // no body required because we send args in query string
             });
 
             if (!resp.ok) {
-                // give helpful error message
                 const txt = await resp.text();
                 throw new Error(`Server returned ${resp.status}: ${txt}`);
             }

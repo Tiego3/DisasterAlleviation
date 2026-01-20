@@ -1,0 +1,280 @@
+﻿@page
+@model DisasterAlleviation.Pages.Admin.AdminAllocateVolunteersModel
+@{
+    ViewData["Title"] = "Allocate Volunteers";
+}
+
+<section class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <div>
+            <a asp-page="/Admin/AdminDashboard"
+               class="btn btn-light border rounded-pill px-3 py-1 small fw-semibold text-secondary back-btn me-3">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back
+            </a>
+        </div>
+        <div>
+            <h2 class="fw-bold mb-0">Allocate Volunteers</h2>
+            <p class="text-muted small mb-0">Assign approved volunteers to active disasters</p>
+        </div>
+    </div>
+
+    @if (!Model.ActiveDisasters.Any())
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            No active disasters available for volunteer allocation.
+        </div>
+    }
+    else if (!Model.ApprovedVolunteers.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            No approved volunteers available. Please approve volunteers first.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <!-- Left: Allocation Form -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm p-4 mb-4">
+                    <h4 class="mb-3"><i class="bi bi-people-fill me-2"></i>Volunteer Allocation Form</h4>
+
+                    <form method="post" id="allocationForm">
+                        <!-- Select Disaster -->
+                        <div class="mb-3">
+                            <label asp-for="Input.DisasterId" class="form-label fw-semibold">
+                                Select Disaster *
+                            </label>
+                            <select asp-for="Input.DisasterId"
+                                    class="form-select"
+                                    id="disasterSelect"
+                                    required>
+                                <option value="">-- Select a disaster --</option>
+                                @foreach (var d in Model.ActiveDisasters)
+                                {
+                                    <option value="@d.Id"
+                                            data-location="@d.Location"
+                                            data-type="@d.TypeOfDisaster"
+                                            data-aid="@d.RequiredAidTypes">
+                                        @d.TypeOfDisaster - @d.Location (@d.StartDate.ToString("yyyy-MM-dd"))
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Input.DisasterId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Disaster Details (shown when disaster is selected) -->
+                        <div id="disasterDetails" class="alert alert-info mb-3" style="display:none;">
+                            <h6 class="fw-bold mb-2">Disaster Details</h6>
+                            <p class="mb-1"><strong>Type:</strong> <span id="detailType"></span></p>
+                            <p class="mb-1"><strong>Location:</strong> <span id="detailLocation"></span></p>
+                            <p class="mb-0"><strong>Required Aid:</strong> <span id="detailAid"></span></p>
+                        </div>
+
+                        <!-- Select Volunteer -->
+                        <div class="mb-3">
+                            <label asp-for="Input.VolunteerId" class="form-label fw-semibold">
+                                Select Volunteer *
+                            </label>
+                            <select asp-for="Input.VolunteerId"
+                                    class="form-select"
+                                    id="volunteerSelect"
+                                    required>
+                                <option value="">-- Select a volunteer --</option>
+                                @foreach (var v in Model.ApprovedVolunteers)
+                                {
+                                    <option value="@v.Id"
+                                            data-location="@v.Location"
+                                            data-skills="@v.Skills"
+                                            data-travel="@v.WillingToTravel"
+                                            data-transport="@v.HasTransportation"
+                                            data-fromdate="@v.AvailableFromDate?.ToString("yyyy-MM-dd")"
+                                            data-untildate="@v.AvailableUntilDate?.ToString("yyyy-MM-dd")">
+
+                                        @v.FullName - @v.Location
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Input.VolunteerId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Volunteer Details (shown when volunteer is selected) -->
+                        <div id="volunteerDetails" class="alert alert-success mb-3" style="display:none;">
+                            <h6 class="fw-bold mb-2">Volunteer Details</h6>
+                            <p class="mb-1"><strong>Location:</strong> <span id="vDetailLocation"></span></p>
+                            <p class="mb-1"><strong>Skills:</strong> <span id="vDetailSkills"></span></p>
+                            <p class="mb-1"><strong>Can Travel:</strong> <span id="vDetailTravel"></span></p>
+                            <p class="mb-0"><strong>Transportation:</strong> <span id="vDetailTransport"></span></p>
+                            <p class="mb-1"><strong>Available From:</strong> <span id="vDetailFromDate"></span></p>
+                            <p class="mb-0"><strong>Available Until:</strong> <span id="vDetailUntilDate"></span></p>
+                        </div>
+
+                        <!-- Role/Task Assignment -->
+                        <div class="mb-3">
+                            <label asp-for="Input.AssignedRole" class="form-label fw-semibold">
+                                Assigned Role/Task
+                            </label>
+                            <select asp-for="Input.AssignedRole" class="form-select">
+                                <option value="">-- Select role (optional) --</option>
+                                <option>General Support</option>
+                                <option>Medical Assistance</option>
+                                <option>Logistics & Distribution</option>
+                                <option>Food Preparation</option>
+                                <option>Shelter Setup</option>
+                                <option>Communication & Coordination</option>
+                                <option>Transportation</option>
+                                <option>Registration & Documentation</option>
+                                <option>Child Care</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="mb-3">
+                            <label asp-for="Input.Notes" class="form-label fw-semibold">
+                                Additional Notes
+                            </label>
+                            <textarea asp-for="Input.Notes"
+                                      class="form-control"
+                                      rows="2"
+                                      placeholder="Any special instructions or notes..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-gradient w-100 py-2 fw-semibold">
+                            <i class="bi bi-check-circle me-2"></i>Allocate Volunteer
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right: Summary Stats -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm p-4 mb-3">
+                    <h5 class="fw-bold mb-3">Available Resources</h5>
+                    <div class="mb-3">
+                        <h6 class="text-primary">Active Disasters</h6>
+                        <h4 class="text-primary">@Model.ActiveDisasters.Count</h4>
+                        <small class="text-muted">Requiring volunteers</small>
+                    </div>
+                    <hr>
+                    <div>
+                        <h6 class="text-success">Approved Volunteers</h6>
+                        <h4 class="text-success">@Model.ApprovedVolunteers.Count</h4>
+                        <small class="text-muted">Ready for assignment</small>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm p-4">
+                    <h6 class="fw-bold mb-3">Quick Stats</h6>
+                    <p class="mb-2"><strong>Can Travel:</strong> @Model.CanTravelCount</p>
+                    <p class="mb-2"><strong>Has Transport:</strong> @Model.HasTransportCount</p>
+                    <p class="mb-0"><strong>Total Allocated:</strong> @Model.TotalAllocated</p>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const disasterSelect = document.getElementById('disasterSelect');
+        const volunteerSelect = document.getElementById('volunteerSelect');
+        const disasterDetails = document.getElementById('disasterDetails');
+        const volunteerDetails = document.getElementById('volunteerDetails');
+
+        // Show disaster details when selected
+        disasterSelect.addEventListener('change', function() {
+            if (this.value) {
+                const option = this.options[this.selectedIndex];
+                document.getElementById('detailType').textContent = option.dataset.type;
+                document.getElementById('detailLocation').textContent = option.dataset.location;
+                document.getElementById('detailAid').textContent = option.dataset.aid || 'Not specified';
+                disasterDetails.style.display = 'block';
+            } else {
+                disasterDetails.style.display = 'none';
+            }
+        });
+
+        // Show volunteer details when selected
+        volunteerSelect.addEventListener('change', function() {
+            if (this.value) {
+                const option = this.options[this.selectedIndex];
+                document.getElementById('vDetailLocation').textContent = option.dataset.location;
+                document.getElementById('vDetailSkills').textContent = option.dataset.skills || 'Not specified';
+                document.getElementById('vDetailTravel').textContent = option.dataset.travel === 'True' ? 'Yes' : 'No';
+                document.getElementById('vDetailTransport').textContent = option.dataset.transport === 'True' ? 'Yes' : 'No';
+
+                const fromDate = option.dataset.fromdate;
+                const untilDate = option.dataset.untildate;
+                document.getElementById('vDetailFromDate').textContent = fromDate ? new Date(fromDate).toLocaleDateString() : '—';
+                document.getElementById('vDetailUntilDate').textContent = untilDate ? new Date(untilDate).toLocaleDateString() : '—';
+
+                volunteerDetails.style.display = 'block';
+            } else {
+                volunteerDetails.style.display = 'none';
+            }
+        });
+
+        // Form submission with SweetAlert
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        document.getElementById('allocationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'RequestVerificationToken': csrfToken ?? '' }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Volunteer Allocated!',
+                        text: 'The volunteer has been successfully assigned to the disaster.',
+                        confirmButtonColor: '#4f12de',
+                        timer: 2000
+                    });
+                    window.location.href = result.redirectUrl || '/Admin/AdminDashboard';
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Allocation failed');
+                }
+            } catch (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.message || 'Failed to allocate volunteer. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .btn-gradient {
+            background: linear-gradient(90deg, #5b3df5 0%, #8c49ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-gradient:hover {
+                background: #059669 !important;
+                color: #fff !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            }
+    </style>
+}

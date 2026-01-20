@@ -1,4 +1,4 @@
-# DisasterAlleviation
+﻿# DisasterAlleviation
 
 Gift of the Givers Foundation - Disaster Alleviation App
 
@@ -69,6 +69,43 @@ Follow the on-screen instructions to use the application
 - Incident Management
 - Donatation Management
 - Volunteer Management
+
+
+### Google Maps API Key Configuration Setup Instructions
+
+This project uses Google Places API for location autocomplete.
+
+**To set up:**
+
+1. Get a Google Maps API key:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing
+   - Enable "Places API" and "Maps JavaScript API"
+   - Create credentials → API Key
+   - Restrict the key to your domain
+
+2. Add the API key to your local configuration:
+   - Create `appsettings.Development.json` (if it doesn't exist)
+   - Add:
+```json
+     {
+       "GoogleMapsApiKey": "YOUR_ACTUAL_API_KEY_HERE"
+     }
+```
+
+3. **Never commit your actual API key to GitHub!**
+
+### 2. Database Setup
+
+Run migrations:
+```bash
+dotnet ef database update
+```
+
+### 3. Run the Application
+```bash
+dotnet run
+```
 
 # Repo-Link
 

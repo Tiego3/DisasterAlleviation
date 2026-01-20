@@ -14,12 +14,22 @@ namespace DisasterAlleviation.Models
         [Required] public string PhoneNumber { get; set; }
         [Required] public string Location { get; set; }
         [Required] public string Availability { get; set; }
+
+        [Display(Name = "Available From")]
+        [DataType(DataType.Date)]
+        public DateTime? AvailableFromDate { get; set; }
+
+        [Display(Name = "Available Until")]
+        [DataType(DataType.Date)]
+        public DateTime? AvailableUntilDate { get; set; }
         [Required] public string Skills { get; set; }
 
         public string? PreviousExperience { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? AvailableDates { get; set; }
+        
+
+        //[DataType(DataType.Date)]
+        //public DateTime? AvailableDates { get; set; }
 
         [Required] public string EmergencyContact { get; set; }
 

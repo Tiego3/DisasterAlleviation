@@ -48,13 +48,27 @@ namespace DisasterAlleviation.Pages.Admin
                 .OrderByDescending(d => d.StartDate)
                 .ToListAsync();
 
-            AvailableMonetary = await _context.MonetaryDonations
-                .Where(d => !_context.ResourceAllocations.Any(r => r.SourceType == "Monetary" && r.SourceId == d.Id))
-                .SumAsync(d => (decimal?)d.Amount) ?? 0m;
+    
+            var totalMonetary = await _context.MonetaryDonations.SumAsync(d => (decimal?)d.Amount) ?? 0m;
 
-            AvailableGoods = await _context.GoodsDonations
-                .Where(d => !_context.ResourceAllocations.Any(r => r.SourceType == "Goods" && r.SourceId == d.Id))
+            // Calculate allocated monetary funds
+            var allocatedMonetary = await _context.ResourceAllocations
+                .Where(r => r.ResourceType == "Monetary")
+                .SumAsync(r => (decimal?)r.Quantity) ?? 0m;
+
+            AvailableMonetary = totalMonetary - allocatedMonetary;
+
+            // Calculate total completed goods donations
+            var totalGoods = await _context.GoodsDonations
+                .Where(d => d.DropoffStatus == "Completed")
                 .SumAsync(d => (int?)d.ItemsCount) ?? 0;
+
+            // Calculate allocated goods
+            var allocatedGoods = await _context.ResourceAllocations
+                .Where(r => r.ResourceType == "Goods")
+                .SumAsync(r => (int?)r.Quantity) ?? 0;
+
+            AvailableGoods = totalGoods - allocatedGoods;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -87,6 +101,45 @@ namespace DisasterAlleviation.Pages.Admin
                 return Page();
             }
 
+            // VALIDATE SUFFICIENT RESOURCES BEFORE ALLOCATING
+            if (Input.ResourceType == "Monetary")
+            {
+                // Check available monetary funds
+                var totalMonetary = await _context.MonetaryDonations.SumAsync(d => (decimal?)d.Amount) ?? 0m;
+                var allocatedMonetary = await _context.ResourceAllocations
+                    .Where(r => r.ResourceType == "Monetary")
+                    .SumAsync(r => (decimal?)r.Quantity) ?? 0m;
+                var availableMonetary = totalMonetary - allocatedMonetary;
+
+                if (Input.MonetaryAmount.Value > availableMonetary)
+                {
+                    ModelState.AddModelError("Input.MonetaryAmount",
+                        $"Insufficient funds. Only R{availableMonetary:N2} available.");
+                    await OnGetAsync();
+                    return Page();
+                }
+            }
+            else // Goods
+            {
+                // Check available goods
+                var totalGoods = await _context.GoodsDonations
+                    .Where(d => d.DropoffStatus == "Completed")
+                    .SumAsync(d => (int?)d.ItemsCount) ?? 0;
+                var allocatedGoods = await _context.ResourceAllocations
+                    .Where(r => r.ResourceType == "Goods")
+                    .SumAsync(r => (int?)r.Quantity) ?? 0;
+                var availableGoods = totalGoods - allocatedGoods;
+
+                if (Input.GoodsQuantity.Value > availableGoods)
+                {
+                    ModelState.AddModelError("Input.GoodsQuantity",
+                        $"Insufficient goods. Only {availableGoods} items available.");
+                    await OnGetAsync();
+                    return Page();
+                }
+            }
+
+            // CREATE SINGLE ALLOCATION RECORD (no duplicates)
             var allocation = new ResourceAllocation
             {
                 DisasterId = Input.DisasterId,

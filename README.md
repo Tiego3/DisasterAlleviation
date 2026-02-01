@@ -1,112 +1,217 @@
-﻿# DisasterAlleviation
+# Disaster Alleviation Foundation  
+**A Web-Based Disaster Relief Management System**
 
-Gift of the Givers Foundation - Disaster Alleviation App
+---
 
-## Table of Contents
+## Project Overview
 
-- [Prerequisites](#prerequisites)
-- [Running-Application](#running-application)
-- [Usage](#usage)
-- [Updated-Features](#updated-features)
-- [Github-Link](#github-Link)
+The **Disaster Alleviation Foundation** is a full-stack web application designed to support humanitarian organisations in managing disaster relief operations.
 
-# Prerequisites
+The platform enables the public to donate money or goods, apply to volunteer, and allows administrators to manage disasters, track resources, and allocate aid in a structured and transparent way.
 
-Visual Studio 2022
+The core problem this application addresses is **coordination and accountability in disaster response** — ensuring that donations, volunteers, and relief resources are properly recorded, monitored, and distributed.
 
-# Dependecies
+This project simulates a real-world NGO operations system and is built as a portfolio-grade application showcasing full-stack web development with enterprise-style patterns.
 
-- Microsoft.AspNetCore.Identity.EntityFrameworkCore (8.0.8)
-- Microsoft.AspNetCore.Identity.UI (8.0.8)
-- Microsoft.EntityFrameworkCore (8.0.8)
-- Microsoft.EntityFrameworkCore.SqlServer (8.0.8)
-- Microsoft.EntityFrameworkCore.Tools (8.0.8)
+---
 
-# Running-Application
+## Key Features
 
-Unzip Project Folder
--From Project Folder
+### Public Users
+- Submit **monetary donations**
+- Submit **goods donations**
+- Donate **anonymously** with reusable donor IDs
+- Schedule or immediately drop off goods
+- Register as a **volunteer**
 
-1. Open Project Folder
-2. Open another folder with the same name as Project Folder
-3. Double click DisasterAlleviation.cs or right click, then open with Visual Studio 2022
-4. Click the green arrow button to build and run the application.
+### Administrators
+- Secure admin login system
+- Admin dashboard with live statistics
+- Register and manage disasters
+- View all donations (monetary & goods)
+- Allocate money and goods to disasters
+- Approve or reject volunteers
+- Close completed disasters
+- View volunteers assigned to disasters
 
--From visual studio
+### System Capabilities
+- Role-based access (Admin vs Public)
+- SQL database persistence
+- Real-time dashboard metrics
+- Resource allocation tracking
+- Volunteer management workflow
 
-1. Open visual studio
-2. Click on Open a project or Solution
-3. Navigate to the folder DisasterAlleviation.cs is located, select it, and click open
-4. Click the green arrow button to build and run the application.
+---
 
-# Usage
+## Tech Stack
 
-Follow the on-screen instructions to use the application
+| Layer | Technology |
+|------|------------|
+| Frontend | Razor Pages (ASP.NET Core) |
+| Backend | ASP.NET Core |
+| ORM | Entity Framework Core |
+| Database | SQL Server |
+| Authentication | ASP.NET Identity |
+| UI Framework | Bootstrap 5 |
+| Client Scripts | JavaScript |
+| Architecture | MVC-style Razor Pages |
 
-1. Register
+---
 
-   - Click Register button to register with email and password
+## High-Level Architecture
 
-2. Login
-
-- Click Login button to login with email and password
-
-3. Dashboard
-
-- Report Incident
-- Donate
-- Volunteer
-- Manageme Profile
-
-4. Login (As Admin)
-
-- Credentials - email - admin@example.com - password = Admin@123
-
-- Click Login button to login with email and password
-
-5. Admin Dashboard
-
-- Incident Management
-- Donatation Management
-- Volunteer Management
-
-
-### Google Maps API Key Configuration Setup Instructions
-
-This project uses Google Places API for location autocomplete.
-
-**To set up:**
-
-1. Get a Google Maps API key:
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing
-   - Enable "Places API" and "Maps JavaScript API"
-   - Create credentials → API Key
-   - Restrict the key to your domain
-
-2. Add the API key to your local configuration:
-   - Create `appsettings.Development.json` (if it doesn't exist)
-   - Add:
-```json
-     {
-       "GoogleMapsApiKey": "YOUR_ACTUAL_API_KEY_HERE"
-     }
 ```
 
-3. **Never commit your actual API key to GitHub!**
+Browser (User/Admin)
+↓
+Razor Pages UI
+↓
+Page Models (C#)
+↓
+Entity Framework Core
+↓
+SQL Server Database
 
-### 2. Database Setup
+```
 
-Run migrations:
+### Core Domains
+- Donations (Monetary, Goods)
+- Disasters
+- Volunteers
+- Categories
+- Users (Identity)
+
+Each domain is represented by a model class and persisted using EF Core.
+
+---
+
+## Setup & Installation
+
+### Prerequisites
+- .NET 7 or later
+- SQL Server / LocalDB
+- Visual Studio or VS Code
+
+### Steps
+
+1. Clone the repository
+```bash
+git clone https://github.com/Tiego3/DisasterAlleviation
+```
+
+2. Configure the database connection
+   Update `appsettings.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=DisasterAlleviationDb;Trusted_Connection=True;"
+}
+```
+
+3. Apply database migrations
+
 ```bash
 dotnet ef database update
 ```
 
-### 3. Run the Application
+4. Run the application
+
 ```bash
 dotnet run
 ```
 
-# Repo-Link
+5. Open in browser
 
-https://dev.azure.com/ST10102873/Gift%20of%20the%20Givers%20Foundation/_git/DisasterAlleviation
+```
+https://localhost:5001
+```
+
+---
+
+## How to Use the Application
+
+### For Donors
+
+1. Navigate to **Donate**
+2. Choose:
+
+   * Monetary or Goods
+3. Enter required details
+4. Submit donation
+5. Save your Anonymous ID (if applicable)
+
+### For Volunteers
+
+1. Go to **Volunteer**
+2. Complete the form
+3. Submit application
+4. Wait for admin approval
+
+### For Admins
+
+1. Login via **Admin Sign In**
+2. Access the **Admin Dashboard**
+3. Manage:
+
+   * Disasters
+   * Donations
+   * Volunteers
+   * Resource allocation
+
+---
+
+## Assumptions & Inferred Design Decisions
+
+> These are inferred from the codebase and explicitly stated.
+
+* Admin accounts are manually created.
+* Disaster lifecycle: `Active → Closed`.
+* Monetary donations are recorded numerically (no payment gateway).
+* Goods donations are stored by quantity, not individual inventory units.
+* Resource allocation does not automatically deduct stock.
+* Volunteers must be approved before being allocated.
+
+---
+
+## Limitations
+
+* No real payment integration.
+* No automated email notifications.
+* No mobile application.
+* Inventory is not physically tracked.
+* Admin actions are manual.
+
+---
+
+## Potential Future Enhancements
+
+* Payment gateway integration (PayFast / Stripe)
+* Real-time inventory management
+* Email/SMS notifications
+* Disaster heatmap visualisation
+* Public transparency reports
+* Advanced analytics dashboard
+* Mobile-friendly UI redesign
+
+---
+
+## Why This Project Matters (Recruiter View)
+
+This project demonstrates:
+
+* Full-stack web development
+* Real-world domain modelling
+* Secure authentication systems
+* Role-based access control
+* SQL database design
+* Admin workflow design
+* UI/UX for business systems
+* Professional application architecture
+
+It simulates a **production-grade NGO operations platform**, not just a simple CRUD application.
+
+---
+
+## Portfolio Summary
+
+> *A full-stack ASP.NET Core web platform for managing disaster relief operations, including donations, volunteers, and resource allocation with secure admin workflows and SQL-backed persistence.*
